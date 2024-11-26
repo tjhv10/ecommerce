@@ -1,0 +1,34 @@
+ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  margin-top: 0px;
+  padding: 1px;
+  overflow: hidden;
+  background-color: #333333;
+}
+li {
+  padding: 1px;
+  float: left;
+}
+.main {
+  position: relative;
+  margin-top: 0px;
+  margin-bottom: 300px;
+  clear: left;
+  z-index: 0;
+  text-align: center; /* Add This*/
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+}
+
+li a:hover {
+  padding: 10px;
+  background-color: #111111;
+}

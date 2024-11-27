@@ -4,7 +4,7 @@ ul {
   align-items: center;
   list-style-type: none;
   margin-top: 0px;
-  padding: 1px;
+  padding: 10px;
   overflow: hidden;
   background-color: #333333;
 }
@@ -15,10 +15,10 @@ li {
 .main {
   position: relative;
   margin-top: 0px;
-  margin-bottom: 300px;
+  margin-bottom: 30px;
   clear: left;
   z-index: 0;
-  text-align: center; /* Add This*/
+  text-align: center;
 }
 li a {
   display: block;

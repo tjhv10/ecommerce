@@ -43,17 +43,19 @@ const Items: React.FC = () => {
           break;
         }
         case "Uploaded date": {
-          if (firstItem.category === value) addItem(firstItem);
+          if (Date.parse(firstItem.uploadedDate) >= Date.parse(value))
+            addItem(firstItem);
           break;
         }
       }
     }
   }, [category, value]);
+
   useEffect(() => {
-    console.log(category);
     document.getElementById("filter_choose")!.innerHTML = "";
     const mySet = new Set<string>();
     if (category === "Category") {
+      setValue("Accessories");
       for (const i in md) mySet.add(md[i]["category"]);
       mySet.forEach(function (value) {
         document.getElementById("filter_choose")!.innerHTML =
@@ -65,29 +67,32 @@ const Items: React.FC = () => {
           "</option>";
       });
     } else if (category === "Price") {
-      for (let i = 0; i <= 4; i++)
-        mySet.add((1000 * i).toString() + "-" + (1000 * (1 + i)).toString());
+      setValue("0-500");
+      for (let i = 0; i <= 3; i++)
+        mySet.add((500 * i).toString() + "-" + (500 * (1 + i)).toString());
       mySet.forEach(function (value) {
         document.getElementById("filter_choose")!.innerHTML =
           document.getElementById("filter_choose")?.innerHTML +
           '<option value="' +
           value +
-          '" onSelect' +
-          "=" +
-          '"{() => setValue("' +
-          value +
-          '")}>' +
+          '">' +
           value +
           "</option>";
       });
-      console.log(document.getElementById("filter_choose")!.innerHTML);
-      const e = document.getElementById("filter_choose") as HTMLSelectElement;
-      setValue(e.options[e.selectedIndex].value);
-      console.log(value);
     } else if (category === "Uploaded date") {
-      /* empty */
+      setValue("1/1/2000");
+      for (let i = 15; i <= 22; i++) mySet.add("1/1/20" + i.toString());
+      mySet.forEach(function (value) {
+        document.getElementById("filter_choose")!.innerHTML =
+          document.getElementById("filter_choose")?.innerHTML +
+          '<option value="' +
+          value +
+          '">' +
+          value +
+          " and later</option>";
+      });
     }
-  }, [category, value]);
+  }, [category]);
 
   const renderItems = () =>
     Items.map((item) => (
@@ -114,16 +119,30 @@ const Items: React.FC = () => {
           setCategory(e.options[e.selectedIndex].value);
         }}
       >
-        <option value="">Selcet filter</option>
-        <option value="Category" onSelect={() => setCategory("category")}>
-          Category
+        <option
+          value=""
+          onSelect={() =>
+            (document.getElementById("filter_choose")!.style.display = "block")
+          }
+        >
+          No filter
         </option>
+        <option value="Category">Category</option>
         <option value="Price">Price</option>
-        <option value="Uploaded date" onSelect={() => setCategory("ud")}>
-          Uploaded date
-        </option>
+        <option value="Uploaded date">Uploaded date</option>
       </select>
-      <select name="filter choose" id="filter_choose"></select>
+      <select
+        name="filter choose"
+        id="filter_choose"
+        onChange={() => {
+          const e = document.getElementById(
+            "filter_choose"
+          ) as HTMLSelectElement;
+          setValue(e.options[e.selectedIndex].value);
+        }}
+      ></select>
+      <input type="text" placeholder="Search..."></input>
+      <button>search</button>
       <div className={styles.content}>{renderItems()}</div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./mainNav.module.scss";
+import search from "../../components/items/items";
 
 function MainNavigation() {
   return (
@@ -8,7 +9,7 @@ function MainNavigation() {
         <nav>
           <ul>
             <li>
-              <Link to="/">
+              <Link to="/" onClick={() => search("")}>
                 <img
                   src="https://i.pinimg.com/736x/16/48/41/164841e3ae4f5369f1b4299df0a17154.jpg"
                   height="50px"

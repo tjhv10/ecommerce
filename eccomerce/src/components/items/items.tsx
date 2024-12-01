@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from "react";
-// import { CartContext } from "../../store/shopping-cart-context";
 import styles from "./items.module.scss";
 import Item, { ItemProps } from "../item/item.tsx";
 import md from "../../assets/MOCK_DATA.json";
 
 const Items: React.FC = () => {
-  const [Items, setItems] = useState<ItemProps[]>([]);
+  const alli: ItemProps[] | (() => ItemProps[]) = [];
   const [category, setCategory] = useState<string>("");
   const [value, setValue] = useState("");
-  const [allItems, setAllItems] = useState<ItemProps[]>([]);
-  const addItemToAllItems = (Item: ItemProps) => {
-    setAllItems((prevItems) => [...prevItems, Item]);
-  };
+  const [Items, setItems] = useState<ItemProps[]>(alli);
   const addItem = (Item: ItemProps) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
-
   useEffect(() => {
-    setAllItems([]);
     for (let i = 0; i < md.length; i++) {
       const item: ItemProps = {
         id: md[i].id,
@@ -31,9 +25,9 @@ const Items: React.FC = () => {
         img_url: md[i].img_url,
         category: md[i].category,
       };
-      addItemToAllItems(item);
+      alli.push(item);
     }
-  }, []);
+  });
 
   useEffect(() => {
     setItems([]);
@@ -81,50 +75,32 @@ const Items: React.FC = () => {
     if (category === "Category") {
       setValue("Accessories");
       for (const i in md) mySet.add(md[i]["category"]);
-      mySet.forEach(function (value) {
-        document.getElementById("filter_choose")!.innerHTML =
-          document.getElementById("filter_choose")?.innerHTML +
-          "<option value='" +
-          value +
-          "'>" +
-          value +
-          "</option>";
-      });
     } else if (category === "Price") {
       setValue("0-500");
       for (let i = 0; i <= 3; i++)
         mySet.add((500 * i).toString() + "-" + (500 * (1 + i)).toString());
-      mySet.forEach(function (value) {
-        document.getElementById("filter_choose")!.innerHTML =
-          document.getElementById("filter_choose")?.innerHTML +
-          '<option value="' +
-          value +
-          '">' +
-          value +
-          "</option>";
-      });
     } else if (category === "Uploaded date") {
-      setValue("1/1/2000");
+      setValue("1/1/2015");
       for (let i = 15; i <= 22; i++) mySet.add("1/1/20" + i.toString());
-      mySet.forEach(function (value) {
-        document.getElementById("filter_choose")!.innerHTML =
-          document.getElementById("filter_choose")?.innerHTML +
-          '<option value="' +
-          value +
-          '">' +
-          value +
-          " and later</option>";
-      });
     }
+    mySet.forEach(function (value) {
+      document.getElementById("filter_choose")!.innerHTML =
+        document.getElementById("filter_choose")?.innerHTML +
+        '<option value="' +
+        value +
+        '">' +
+        value +
+        "</option>";
+    });
   }, [category]);
+
   const search = (phrase: string) => {
-    setItems([]);
     if (phrase === "") {
-      setItems(allItems);
+      setItems(alli);
       return;
     }
 
-    const result = allItems.filter(
+    const result = Items.filter(
       (item) =>
         item.name.toLowerCase() === phrase.toLowerCase().trim() ||
         item.category.toLowerCase() === phrase.toLowerCase().trim() ||
@@ -134,22 +110,8 @@ const Items: React.FC = () => {
     setItems(result);
   };
 
-  const renderItems = () =>
-    Items.map((item) => (
-      <Item
-        key={item.id.toString()}
-        id={item.id}
-        name={item.name}
-        brand={item.brand}
-        model={item.model}
-        uploadedDate={item.uploadedDate}
-        Description={item.Description}
-        price={item.price}
-        Seller_name={item.Seller_name}
-        img_url={item.img_url}
-        category={item.category}
-      />
-    ));
+  const renderItems = (Items: ItemProps[]) =>
+    Items.map((item) => <Item props={item} />);
 
   return (
     <div className={styles.page}>
@@ -200,7 +162,7 @@ const Items: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className={styles.content}>{renderItems()}</div>
+      <div className={styles.content}>{renderItems(Items)}</div>
     </div>
   );
 };

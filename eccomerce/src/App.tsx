@@ -6,6 +6,8 @@ import HomePage from "./pages/HomePage/HomePage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Cart from "./pages/Cart/Cart";
 import Prodact from "./pages/prodact/Prodact";
+import { useState } from "react";
+import { CartContext } from "./store/shopping-cart-context";
 
 const router = createBrowserRouter([
   {
@@ -28,8 +30,16 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
 function App() {
-  return <RouterProvider router={router} />;
+  const [shoppingCart] = useState({
+    items: [],
+  });
+  return (
+    <CartContext.Provider value={shoppingCart}>
+      <RouterProvider router={router} />
+    </CartContext.Provider>
+  );
 }
 
 export default App;

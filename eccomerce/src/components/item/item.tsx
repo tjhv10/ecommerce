@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { CartContext } from "../../store/shopping-cart-context";
 
 export interface ItemProps {
+  filter(arg0: (item: { id: number }) => boolean): ItemProps;
   id: number;
   brand: string;
   model: string;
@@ -16,7 +17,8 @@ export interface ItemProps {
   category: string;
 }
 
-const Item: React.FC<ItemProps> = (props) => {
+// const Item: React.FC<ItemProps> = (props) => {
+const Item = ({ props }: { props: ItemProps }): JSX.Element => {
   const crtx = useContext(CartContext);
   const addItemToShoppingCart = (Item: ItemProps) => {
     crtx.items = [...crtx.items, Item];

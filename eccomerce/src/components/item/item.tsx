@@ -4,7 +4,6 @@ import { useContext } from "react";
 import { CartContext } from "../../store/shopping-cart-context";
 
 export interface ItemProps {
-  filter(arg0: (item: { id: number }) => boolean): ItemProps;
   id: number;
   brand: string;
   model: string;
@@ -17,11 +16,23 @@ export interface ItemProps {
   category: string;
 }
 
-// const Item: React.FC<ItemProps> = (props) => {
 const Item = ({ props }: { props: ItemProps }): JSX.Element => {
   const crtx = useContext(CartContext);
-  const addItemToShoppingCart = (Item: ItemProps) => {
-    crtx.items = [...crtx.items, Item];
+  const addItemToShoppingCart = (newItem: ItemProps) => {
+    const sameItem = crtx.items.filter(
+      (item: ItemProps) => item.id === newItem.id
+    );
+    if (sameItem.length == 0) {
+      crtx.items = [...crtx.items, newItem];
+      if (
+        isNaN(crtx.quantityHash[newItem.id]) ||
+        crtx.quantityHash[newItem.id] == 0
+      ) {
+        crtx.quantityHash[newItem.id] = 1;
+      }
+    } else {
+      crtx.quantityHash[newItem.id]++;
+    }
   };
 
   return (

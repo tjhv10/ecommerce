@@ -34,6 +34,7 @@ const router = createBrowserRouter([
 function App() {
   const [shoppingCart] = useState({
     items: [],
+    quantityHash: [],
   });
   return (
     <CartContext.Provider value={shoppingCart}>

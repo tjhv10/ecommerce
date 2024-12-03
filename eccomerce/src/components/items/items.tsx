@@ -111,7 +111,7 @@ const Items: React.FC = () => {
   };
 
   const renderItems = (Items: ItemProps[]) =>
-    Items.map((item) => <Item props={item} />);
+    Items.map((item) => <Item key={item.id} props={item} />);
 
   return (
     <div className={styles.page}>

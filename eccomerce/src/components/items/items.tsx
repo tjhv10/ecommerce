@@ -82,7 +82,6 @@ const Items: React.FC = () => {
                   search(
                     searchRef.current.value,
                     setItems,
-                    alli,
                     Items,
                     setSort,
                     sortRef
@@ -97,7 +96,6 @@ const Items: React.FC = () => {
                 search(
                   searchRef.current.value,
                   setItems,
-                  alli,
                   Items,
                   setSort,
                   sortRef

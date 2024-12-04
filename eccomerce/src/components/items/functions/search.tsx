@@ -13,13 +13,16 @@ const search = (
     setItems(alli);
     return;
   }
-  console.log(Items);
   const result = Items.filter(
     (item: { name: string; category: string; model: string; brand: string }) =>
-      item.name.toLowerCase() === phrase.toLowerCase().trim() ||
-      item.category.toLowerCase() === phrase.toLowerCase().trim() ||
-      item.model.toLowerCase() === phrase.toLowerCase().trim() ||
-      item.brand.toLowerCase() === phrase.toLowerCase().trim()
+      item.name.toLowerCase().substring(0, phrase.length) ===
+        phrase.toLowerCase().trim() ||
+      item.category.toLowerCase().substring(0, phrase.length) ===
+        phrase.toLowerCase().trim() ||
+      item.model.toLowerCase().substring(0, phrase.length) ===
+        phrase.toLowerCase().trim() ||
+      item.brand.toLowerCase().substring(0, phrase.length) ===
+        phrase.toLowerCase().trim()
   );
   setItems(result);
   setSort("id");

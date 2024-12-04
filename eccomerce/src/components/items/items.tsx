@@ -5,7 +5,7 @@ import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
 import useInitAllItems from "./hooks/useInitAllItems.tsx";
 import useSetFilterChoose from "./hooks/useSetFilterChoose";
 import useSort from "./hooks/useSort.tsx";
-import Search from "./functions/search.tsx";
+import search from "./functions/search.tsx";
 
 const Items: React.FC = () => {
   const alli: ItemProps[] = [];
@@ -77,6 +77,16 @@ const Items: React.FC = () => {
             onChange={() => {
               if (searchRef.current && searchRef.current.value === "") {
                 setItems(alli);
+              } else {
+                if (searchRef.current)
+                  search(
+                    searchRef.current.value,
+                    setItems,
+                    alli,
+                    Items,
+                    setSort,
+                    sortRef
+                  );
               }
             }}
           ></input>
@@ -84,7 +94,7 @@ const Items: React.FC = () => {
             onClick={() => {
               setItems(alli.slice());
               if (searchRef.current)
-                Search(
+                search(
                   searchRef.current.value,
                   setItems,
                   alli,

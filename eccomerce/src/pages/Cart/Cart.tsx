@@ -12,68 +12,80 @@ const removeItemFromCart = (
 
 function Cart() {
   const crtx = useContext(CartContext);
+  let sum = 0;
+  crtx.items.forEach((element) => {
+    sum += crtx.quantityHash[element.id] * element.price;
+  });
+
   const [items, setItems] = useState(crtx.items);
+  const [price, setPrice] = useState(sum);
   const [quantityHash, setQuantityHash] = useState(crtx.quantityHash);
   return (
-    <div className={styles.content}>
-      {items.map((item) => (
-        <div key={item.id} className={styles.item}>
-          <div className={styles.hl}>{item.name}</div>
-          <div className={styles.cat}>{item.category}</div>
-          <div>
-            <img
-              className={styles.img}
-              src={item.img_url}
-              alt={`${item.name} pic`}
-            />
-          </div>
-          <div className={styles.price}>Price: {item.price}$</div>
-          <div className={styles.quantity}>
-            quantity: {quantityHash[item.id]}
-          </div>
-          <div>
-            <button
-              className={styles.removeB}
-              onClick={() => {
-                crtx.quantityHash[item.id]--;
-                if (crtx.quantityHash[item.id] == 0) {
-                  removeItemFromCart(item.id, crtx);
-                  crtx.quantityHash[item.id] = 0;
-                  setQuantityHash(crtx.quantityHash);
-                  setItems(crtx.items);
-                }
-                const newQuantityHash = crtx.quantityHash.slice();
-                setQuantityHash(newQuantityHash);
-              }}
-            >
-              -
-            </button>
-            <button
-              className={styles.removeB}
-              onClick={() => {
-                crtx.quantityHash[item.id]++;
-                const newQuantityHash = crtx.quantityHash.slice();
-                setQuantityHash(newQuantityHash);
-              }}
-            >
-              +
-            </button>
-          </div>
+    <>
+      <div>Total price: {price}$</div>
+      <div className={styles.content}>
+        {items.map((item) => (
+          <div key={item.id} className={styles.item}>
+            <div className={styles.hl}>{item.name}</div>
+            <div className={styles.cat}>{item.category}</div>
+            <div>
+              <img
+                className={styles.img}
+                src={item.img_url}
+                alt={`${item.name} pic`}
+              />
+            </div>
+            <div className={styles.price}>Price: {item.price}$</div>
+            <div className={styles.quantity}>
+              quantity: {quantityHash[item.id]}
+            </div>
+            <div>
+              <button
+                className={styles.removeB}
+                onClick={() => {
+                  crtx.quantityHash[item.id]--;
+                  if (crtx.quantityHash[item.id] == 0) {
+                    removeItemFromCart(item.id, crtx);
+                    crtx.quantityHash[item.id] = 0;
+                    setQuantityHash(crtx.quantityHash);
+                    setItems(crtx.items);
+                    setPrice(price - item.price);
+                  }
+                  if (crtx.quantityHash[item.id] > 0)
+                    setPrice(price - item.price);
+                  setQuantityHash(crtx.quantityHash.slice());
+                }}
+              >
+                -
+              </button>
+              <button
+                className={styles.removeB}
+                onClick={() => {
+                  crtx.quantityHash[item.id]++;
+                  setPrice(price + item.price);
+                  setQuantityHash(crtx.quantityHash.slice());
+                }}
+              >
+                +
+              </button>
+            </div>
 
-          <button
-            className={styles.removeB}
-            onClick={() => {
-              removeItemFromCart(item.id, crtx);
-              crtx.quantityHash[item.id] = 0;
-              setQuantityHash(crtx.quantityHash);
-              setItems(crtx.items);
-            }}
-          >
-            Remove Item from Cart
-          </button>
-        </div>
-      ))}
-    </div>
+            <button
+              className={styles.removeB}
+              onClick={() => {
+                removeItemFromCart(item.id, crtx);
+                setPrice(price - crtx.quantityHash[item.id] * item.price);
+                crtx.quantityHash[item.id] = 0;
+                setQuantityHash(crtx.quantityHash);
+                setItems(crtx.items);
+              }}
+            >
+              Remove Item from Cart
+            </button>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 export default Cart;

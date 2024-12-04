@@ -1,168 +1,108 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, ReactElement } from "react";
 import styles from "./items.module.scss";
 import Item, { ItemProps } from "../item/item.tsx";
-import md from "../../assets/MOCK_DATA.json";
+import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
+import useInitAllItems from "./hooks/useInitAllItems.tsx";
+import useSetFilterChoose from "./hooks/useSetFilterChoose";
+import useSort from "./hooks/useSort.tsx";
+import Search from "./functions/search.tsx";
 
 const Items: React.FC = () => {
-  const alli: ItemProps[] | (() => ItemProps[]) = [];
+  const alli: ItemProps[] = [];
+
   const [category, setCategory] = useState<string>("");
-  const [value, setValue] = useState("");
+  const [subcategory, setSubcategory] = useState("");
   const [Items, setItems] = useState<ItemProps[]>(alli);
+  const [sort, setSort] = useState<string>("");
+  const [filter_chooseSelect, setFilter_chooseSelect] =
+    useState<ReactElement>();
+  const filterChooseRef = useRef<HTMLSelectElement>(null);
+  const sortRef = useRef<HTMLSelectElement>(null);
+  const filterRef = useRef<HTMLSelectElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
   const addItem = (Item: ItemProps) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
-  useEffect(() => {
-    for (let i = 0; i < md.length; i++) {
-      const item: ItemProps = {
-        id: md[i].id,
-        name: md[i].manufacturer + " " + md[i].model,
-        brand: md[i].manufacturer,
-        model: md[i].model,
-        uploadedDate: md[i].uploaded_date,
-        Description: md[i].descreption,
-        price: md[i].price,
-        Seller_name: md[i].seller_name,
-        img_url: md[i].img_url,
-        category: md[i].category,
-      };
-      alli.push(item);
-    }
-  });
-
-  useEffect(() => {
-    setItems([]);
-    for (const i in md) {
-      const item: ItemProps = {
-        id: md[i].id,
-        name: md[i].manufacturer + " " + md[i].model,
-        brand: md[i].manufacturer,
-        model: md[i].model,
-        uploadedDate: md[i].uploaded_date,
-        Description: md[i].descreption,
-        price: md[i].price,
-        Seller_name: md[i].seller_name,
-        img_url: md[i].img_url,
-        category: md[i].category,
-      };
-      switch (category) {
-        case "": {
-          addItem(item);
-          break;
-        }
-        case "Category": {
-          if (item.category === value) addItem(item);
-          break;
-        }
-        case "Price": {
-          if (
-            item.price >= parseInt(value.split("-")[0]) &&
-            item.price <= parseInt(value.split("-")[1])
-          )
-            addItem(item);
-          break;
-        }
-        case "Uploaded date": {
-          if (Date.parse(item.uploadedDate) >= Date.parse(value)) addItem(item);
-          break;
-        }
-      }
-    }
-  }, [category, value]);
-
-  useEffect(() => {
-    document.getElementById("filter_choose")!.innerHTML = "";
-    const mySet = new Set<string>();
-    if (category === "Category") {
-      setValue("Accessories");
-      for (const i in md) mySet.add(md[i]["category"]);
-    } else if (category === "Price") {
-      setValue("0-500");
-      for (let i = 0; i <= 3; i++)
-        mySet.add((500 * i).toString() + "-" + (500 * (1 + i)).toString());
-    } else if (category === "Uploaded date") {
-      setValue("1/1/2015");
-      for (let i = 15; i <= 22; i++) mySet.add("1/1/20" + i.toString());
-    }
-    mySet.forEach(function (value) {
-      document.getElementById("filter_choose")!.innerHTML =
-        document.getElementById("filter_choose")?.innerHTML +
-        '<option value="' +
-        value +
-        '">' +
-        value +
-        "</option>";
-    });
-  }, [category]);
-
-  const search = (phrase: string) => {
-    if (phrase === "") {
-      setItems(alli);
-      return;
-    }
-
-    const result = Items.filter(
-      (item) =>
-        item.name.toLowerCase() === phrase.toLowerCase().trim() ||
-        item.category.toLowerCase() === phrase.toLowerCase().trim() ||
-        item.model.toLowerCase() === phrase.toLowerCase().trim() ||
-        item.brand.toLowerCase() === phrase.toLowerCase().trim()
-    );
-    setItems(result);
-  };
-
-  const renderItems = (Items: ItemProps[]) =>
-    Items.map((item) => <Item key={item.id} props={item} />);
+  useInitAllItems(alli);
+  useSetItemsCategory(
+    addItem,
+    subcategory,
+    setItems,
+    category,
+    setSubcategory,
+    filterChooseRef,
+    setFilter_chooseSelect
+  );
+  useSort(Items, sort, setItems);
+  useSetFilterChoose(category, filterChooseRef, setSubcategory, subcategory);
 
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>
         <select
           className={styles.filtersBarItem}
+          ref={filterRef}
           name="filter"
           id="filter"
           onChange={() => {
-            const e = document.getElementById("filter") as HTMLSelectElement;
-            setCategory(e.options[e.selectedIndex].value);
+            if (filterRef.current) setCategory(filterRef.current.value);
           }}
         >
-          <option
-            value=""
-            onSelect={() =>
-              (document.getElementById("filter_choose")!.style.display = "none")
-            }
-          >
-            No filter
-          </option>
+          <option value="">No filter</option>
           <option value="Category">Category</option>
           <option value="Price">Price</option>
           <option value="Uploaded date">Uploaded date</option>
         </select>
+        {filter_chooseSelect}
         <select
+          ref={sortRef}
           className={styles.filtersBarItem}
-          name="filter choose"
-          id="filter_choose"
+          name="sort"
+          id="sort"
           onChange={() => {
-            const e = document.getElementById(
-              "filter_choose"
-            ) as HTMLSelectElement;
-            setValue(e.options[e.selectedIndex].value);
+            if (sortRef.current) setSort(sortRef.current.value);
           }}
-        ></select>
+        >
+          <option value="id">Sort...</option>
+          <option value="price">Sort by price</option>
+          <option value="date">Sort by uploaded date</option>
+        </select>
         <div className={styles.filtersBarItem}>
-          <input id="search" type="text" placeholder="Search..."></input>
+          <input
+            ref={searchRef}
+            id="search"
+            type="text"
+            placeholder="Search..."
+            onChange={() => {
+              if (searchRef.current && searchRef.current.value === "") {
+                setItems(alli);
+              }
+            }}
+          ></input>
           <button
             onClick={() => {
-              const inputElement = document.getElementById(
-                "search"
-              ) as HTMLInputElement;
-              search(inputElement.value);
+              setItems(alli.slice());
+              if (searchRef.current)
+                Search(
+                  searchRef.current.value,
+                  setItems,
+                  alli,
+                  Items,
+                  setSort,
+                  sortRef
+                );
             }}
           >
             search
           </button>
         </div>
       </div>
-      <div className={styles.content}>{renderItems(Items)}</div>
+      <div className={styles.content}>
+        {Items.map((item) => (
+          <Item key={item.id} props={item} />
+        ))}
+      </div>
     </div>
   );
 };

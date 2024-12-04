@@ -54,7 +54,7 @@ const Item = ({ props }: { props: ItemProps }): JSX.Element => {
       >
         Add to cart
       </button>
-      <Link to={"/prodact/" + props.id}>
+      <Link to={{ pathname: "/prodact/" + props.id }}>
         <button className={styles.itemB}>Go to prodact</button>
       </Link>
     </div>

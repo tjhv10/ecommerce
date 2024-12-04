@@ -50,7 +50,10 @@ const Item = ({ props }: { props: ItemProps }): JSX.Element => {
       </div>
       <button
         className={styles.buyB}
-        onClick={() => addItemToShoppingCart(props)}
+        onClick={() => {
+          addItemToShoppingCart(props);
+          alert("Added item to cart!");
+        }}
       >
         Add to cart
       </button>

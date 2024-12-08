@@ -41,8 +41,6 @@ function Prodact() {
               const sameItem = prevState.find(
                 ({ product }) => product.id === id
               );
-              console.log(sameItem);
-
               if (!sameItem) {
                 newItem.quantity = 1;
                 return [...prevState, newItem];

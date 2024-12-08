@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../store/shopping-cart-context";
 import styles from "./Cart.module.scss";
 import { CartItem } from "../../App";
@@ -19,6 +19,11 @@ function Cart() {
   });
 
   const [price, setPrice] = useState(sum);
+  useEffect(() => {
+    if (price === 0) {
+      setShoppingCart([]);
+    }
+  }, [price, setShoppingCart]);
   return (
     <>
       <div>Total price: {price}$</div>

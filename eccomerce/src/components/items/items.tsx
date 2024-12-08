@@ -6,13 +6,16 @@ import useInitAllItems from "./hooks/useInitAllItems.tsx";
 import useSetFilterChoose from "./hooks/useSetFilterChoose";
 import useSort from "./hooks/useSort.tsx";
 import search from "./functions/search.tsx";
-
+interface CartItem {
+  product: ItemProps;
+  quantity: number;
+}
 const Items: React.FC = () => {
-  const alli: ItemProps[] = [];
+  const alli: CartItem[] = [];
 
   const [category, setCategory] = useState<string>("");
   const [subcategory, setSubcategory] = useState("");
-  const [Items, setItems] = useState<ItemProps[]>(alli);
+  const [Items, setItems] = useState<CartItem[]>(alli);
   const [sort, setSort] = useState<string>("");
   const [filter_chooseSelect, setFilter_chooseSelect] =
     useState<ReactElement>();
@@ -21,7 +24,7 @@ const Items: React.FC = () => {
   const filterRef = useRef<HTMLSelectElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const addItem = (Item: ItemProps) => {
+  const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
   useInitAllItems(alli);
@@ -108,7 +111,7 @@ const Items: React.FC = () => {
       </div>
       <div className={styles.content}>
         {Items.map((item) => (
-          <Item key={item.id} props={item} />
+          <Item key={item.product.id} props={item} />
         ))}
       </div>
     </div>

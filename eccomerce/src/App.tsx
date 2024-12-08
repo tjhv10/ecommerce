@@ -4,11 +4,16 @@ import "./App.css";
 import RootLayout from "./pages/RootLayout/RootLayout";
 import HomePage from "./pages/HomePage/HomePage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
-import Cart from "./pages/Cart/Cart";
 import Prodact from "./pages/prodact/Prodact";
 import { useState } from "react";
 import { CartContext } from "./store/shopping-cart-context";
+import { ItemProps } from "./components/item/item";
+import Cart from "./pages/Cart/Cart";
 
+export interface CartItem {
+  product: ItemProps;
+  quantity: number;
+}
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,12 +37,10 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [shoppingCart] = useState({
-    items: [],
-    quantityHash: [],
-  });
+  const [shoppingCart, setShoppingCart] = useState<CartItem[]>([]);
+
   return (
-    <CartContext.Provider value={shoppingCart}>
+    <CartContext.Provider value={{ shoppingCart, setShoppingCart }}>
       <RouterProvider router={router} />
     </CartContext.Provider>
   );

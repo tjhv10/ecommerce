@@ -1,22 +1,22 @@
 import { SetStateAction, RefObject, Dispatch } from "react";
-import { ItemProps } from "../../item/item";
+import { CartItem } from "../../../App";
 
 const search = (
   phrase: string,
-  setItems: Dispatch<React.SetStateAction<ItemProps[]>>,
-  Items: ItemProps[],
+  setItems: Dispatch<React.SetStateAction<CartItem[]>>,
+  Items: CartItem[],
   setSort: { (value: SetStateAction<string>): void; (arg0: string): void },
   sortRef: RefObject<HTMLSelectElement>
 ) => {
   const result = Items.filter(
-    (item: { name: string; category: string; model: string; brand: string }) =>
-      item.name.toLowerCase().substring(0, phrase.length) ===
+    (Item) =>
+      Item.product.name.toLowerCase().substring(0, phrase.length) ===
         phrase.toLowerCase().trim() ||
-      item.category.toLowerCase().substring(0, phrase.length) ===
+      Item.product.category.toLowerCase().substring(0, phrase.length) ===
         phrase.toLowerCase().trim() ||
-      item.model.toLowerCase().substring(0, phrase.length) ===
+      Item.product.model.toLowerCase().substring(0, phrase.length) ===
         phrase.toLowerCase().trim() ||
-      item.brand.toLowerCase().substring(0, phrase.length) ===
+      Item.product.brand.toLowerCase().substring(0, phrase.length) ===
         phrase.toLowerCase().trim()
   );
   setItems(result);

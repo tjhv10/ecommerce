@@ -1,59 +1,77 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../../store/shopping-cart-context";
 import styles from "./Cart.module.scss";
-import { ItemProps } from "../../components/item/item";
+import { CartItem } from "../../App";
 
 const removeItemFromCart = (
   ItemId: number,
-  crtx: { items: ItemProps[]; quantityHash: number[] }
+  shoppingCart: CartItem[],
+  setShoppingCart: (arg0: CartItem[]) => void
 ) => {
-  crtx.items = crtx.items.filter((item: { id: number }) => item.id !== ItemId);
+  setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
 };
 
 function Cart() {
-  const crtx = useContext(CartContext);
+  const { shoppingCart, setShoppingCart } = useContext(CartContext);
   let sum = 0;
-  crtx.items.forEach((element) => {
-    sum += crtx.quantityHash[element.id] * element.price;
+  shoppingCart.forEach((item) => {
+    const element = shoppingCart.find(
+      (element) => element.product.id === item.product.id
+    );
+    if (element !== undefined) {
+      element.quantity = 1;
+      sum += element.product.price;
+    }
   });
 
-  const [items, setItems] = useState(crtx.items);
   const [price, setPrice] = useState(sum);
-  const [quantityHash, setQuantityHash] = useState(crtx.quantityHash);
+  const [eleme, setEleme] = useState<CartItem>();
   return (
     <>
       <div>Total price: {price}$</div>
       <div className={styles.content}>
-        {items.map((item) => (
-          <div key={item.id} className={styles.item}>
-            <div className={styles.hl}>{item.name}</div>
-            <div className={styles.cat}>{item.category}</div>
+        {shoppingCart.map((item) => (
+          <div key={item.product.id} className={styles.item}>
+            <div className={styles.hl}>{item.product.name}</div>
+            <div className={styles.cat}>{item.product.category}</div>
             <div>
               <img
                 className={styles.img}
-                src={item.img_url}
-                alt={`${item.name} pic`}
+                src={item.product.img_url}
+                alt={`${item.product.name} pic`}
               />
             </div>
-            <div className={styles.price}>Price: {item.price}$</div>
-            <div className={styles.quantity}>
-              quantity: {quantityHash[item.id]}
-            </div>
+            <div className={styles.price}>Price: {item.product.price}$</div>
+            <div className={styles.quantity}>quantity: {item.quantity}</div>
             <div>
               <button
                 className={styles.removeB}
                 onClick={() => {
-                  crtx.quantityHash[item.id]--;
-                  if (crtx.quantityHash[item.id] == 0) {
-                    removeItemFromCart(item.id, crtx);
-                    crtx.quantityHash[item.id] = 0;
-                    setQuantityHash(crtx.quantityHash);
-                    setItems(crtx.items);
-                    setPrice(price - item.price);
+                  const element = shoppingCart.find(
+                    (element) => element.product.id === item.product.id
+                  );
+
+                  if (element) {
+                    console.log(element.quantity);
+                    setShoppingCart((prevState) => {
+                      const filterdShoppingCart = prevState.filter(
+                        (item) => item.product.id !== element.product.id
+                      );
+                      element.quantity--;
+                      return [...filterdShoppingCart, element];
+                    });
+
+                    if (element.quantity === 0) {
+                      removeItemFromCart(
+                        item.product.id,
+                        shoppingCart,
+                        setShoppingCart
+                      );
+                      setPrice(price - item.product.price);
+                      return;
+                    }
                   }
-                  if (crtx.quantityHash[item.id] > 0)
-                    setPrice(price - item.price);
-                  setQuantityHash(crtx.quantityHash.slice());
+                  setPrice(price - item.product.price);
                 }}
               >
                 -
@@ -61,9 +79,20 @@ function Cart() {
               <button
                 className={styles.removeB}
                 onClick={() => {
-                  crtx.quantityHash[item.id]++;
-                  setPrice(price + item.price);
-                  setQuantityHash(crtx.quantityHash.slice());
+                  const element = shoppingCart.find(
+                    (element) => element.product.id === item.product.id
+                  );
+                  if (element) {
+                    const filterdShoppingCart = shoppingCart.filter(
+                      (item) => item.product.id !== element.product.id
+                    );
+                    setEleme({element.product
+                      element.quan
+                    });
+                    if (eleme) filterdShoppingCart.push(eleme);
+                    setShoppingCart(filterdShoppingCart);
+                    setPrice(price + item.product.price);
+                  }
                 }}
               >
                 +
@@ -73,11 +102,18 @@ function Cart() {
             <button
               className={styles.removeB}
               onClick={() => {
-                removeItemFromCart(item.id, crtx);
-                setPrice(price - crtx.quantityHash[item.id] * item.price);
-                crtx.quantityHash[item.id] = 0;
-                setQuantityHash(crtx.quantityHash);
-                setItems(crtx.items);
+                removeItemFromCart(
+                  item.product.id,
+                  shoppingCart,
+                  setShoppingCart
+                );
+                const element = shoppingCart.find(
+                  (element) => element.product.id
+                );
+                if (element) {
+                  setPrice(price - element.quantity * item.product.price);
+                  element.quantity = 0;
+                }
               }}
             >
               Remove Item from Cart

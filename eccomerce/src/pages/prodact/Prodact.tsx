@@ -3,26 +3,27 @@ import md from "../../assets/MOCK_DATA.json";
 import { useContext, useState } from "react";
 import { ItemProps } from "../../components/item/item";
 import { CartContext } from "../../store/shopping-cart-context";
+import { CartItem } from "../../App";
 
 function Prodact() {
-  const crtx = useContext(CartContext);
+  const { setShoppingCart, shoppingCart } = useContext(CartContext);
   const id = parseInt(window.location.href.split("/").slice(-1)[0]);
-  const [quantityHash, setQuantityHash] = useState(crtx.quantityHash);
   const [buttons, setButtons] = useState(
-    crtx.quantityHash[id] == undefined || crtx.quantityHash[id] == 0 ? (
+    shoppingCart[id].quantity === undefined ||
+      shoppingCart[id].quantity === 0 ? (
       <div></div>
     ) : (
       <div>
         <button
           className={styles.buyB}
           onClick={() => {
-            crtx.quantityHash[id]--;
-            if (crtx.quantityHash[id] == 0) {
-              removeItemFromCart(id, crtx);
-              crtx.quantityHash[id] = 0;
+            shoppingCart[id].quantity--;
+            if (shoppingCart[id].quantity === 0) {
+              removeItemFromCart(id, shoppingCart);
+              shoppingCart[id].quantity = 0;
               setButtons(<></>);
             }
-            setQuantityHash(crtx.quantityHash.slice());
+            // setQuantityHash(shoppingCart.quantity.slice());
           }}
         >
           -
@@ -30,8 +31,8 @@ function Prodact() {
         <button
           className={styles.buyB}
           onClick={() => {
-            crtx.quantityHash[id]++;
-            setQuantityHash(crtx.quantityHash.slice());
+            shoppingCart[id].quantity++;
+            // setQuantityHash(shoppingCart.quantity.slice());
           }}
         >
           +
@@ -51,28 +52,22 @@ function Prodact() {
     img_url: md[id].img_url,
     category: md[id].category,
   };
-  const removeItemFromCart = (
-    ItemId: number,
-    crtx: { items: ItemProps[]; quantityHash: number[] }
-  ) => {
-    crtx.items = crtx.items.filter(
-      (item: { id: number }) => item.id !== ItemId
-    );
+  const removeItemFromCart = (ItemId: number, shoppingCart: CartItem[]) => {
+    setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
   };
-  const addItemToShoppingCart = (newItem: ItemProps) => {
-    const sameItem = crtx.items.filter(
-      (item: ItemProps) => item.id === newItem.id
+  const addItemToShoppingCart = (newItem: CartItem) => {
+    const sameItem = shoppingCart.filter(
+      (item) => item.product.id === newItem.product.id
     );
-    if (sameItem.length == 0) {
-      crtx.items = [...crtx.items, newItem];
-      if (
-        isNaN(crtx.quantityHash[newItem.id]) ||
-        crtx.quantityHash[newItem.id] == 0
-      ) {
-        crtx.quantityHash[newItem.id] = 1;
+    if (sameItem.length === 0) {
+      setShoppingCart([...shoppingCart, newItem]);
+      {
+        const element = shoppingCart.find((element) => element.product.id);
+        if (element) element.quantity = 1;
       }
     } else {
-      crtx.quantityHash[newItem.id]++;
+      const element = shoppingCart.find((element) => element.product.id);
+      if (element) element.quantity++;
     }
   };
 
@@ -91,24 +86,23 @@ function Prodact() {
           Uploaded date: {md[id].uploaded_date}
         </div>
         <div className={styles.uploadedDate}>
-          Items in cart: {quantityHash[id]}
+          Items in cart: {shoppingCart[id].quantity}
         </div>
         <button
           className={styles.buyB}
           onClick={() => {
-            addItemToShoppingCart(itemprop);
+            addItemToShoppingCart({ product: itemprop, quantity: 1 });
             setButtons(
               <div>
                 <button
                   className={styles.buyB}
                   onClick={() => {
-                    crtx.quantityHash[id]--;
-                    if (crtx.quantityHash[id] == 0) {
-                      removeItemFromCart(id, crtx);
-                      crtx.quantityHash[id] = 0;
+                    shoppingCart[id].quantity--;
+                    if (shoppingCart[id].quantity === 0) {
+                      removeItemFromCart(id, shoppingCart);
+                      shoppingCart[id].quantity = 0;
                       setButtons(<></>);
                     }
-                    setQuantityHash(crtx.quantityHash.slice());
                   }}
                 >
                   -
@@ -116,15 +110,13 @@ function Prodact() {
                 <button
                   className={styles.buyB}
                   onClick={() => {
-                    crtx.quantityHash[id]++;
-                    setQuantityHash(crtx.quantityHash.slice());
+                    shoppingCart[id].quantity++;
                   }}
                 >
                   +
                 </button>
               </div>
             );
-            setQuantityHash(crtx.quantityHash.slice());
           }}
         >
           Add to cart

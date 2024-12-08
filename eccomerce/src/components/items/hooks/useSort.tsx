@@ -1,18 +1,18 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { ItemProps } from "../../item/item";
+import { CartItem } from "../../../App";
 
 function useSort(
-  Items: ItemProps[],
+  Items: CartItem[],
   sort: string,
-  setItems: Dispatch<SetStateAction<ItemProps[]>>
+  setItems: Dispatch<SetStateAction<CartItem[]>>
 ) {
   useEffect(() => {
     switch (sort) {
       case "id": {
-        const sorted = Items.slice().sort((a: ItemProps, b: ItemProps) => {
-          if (a.id < b.id) {
+        const sorted = Items.slice().sort((a: CartItem, b: CartItem) => {
+          if (a.product.id < b.product.id) {
             return -1;
-          } else if (a.id == b.id) {
+          } else if (a.product.id === b.product.id) {
             return 0;
           } else {
             return 1;
@@ -22,11 +22,15 @@ function useSort(
         break;
       }
       case "date": {
-        const sorted = Items.slice().sort((a: ItemProps, b: ItemProps) => {
-          if (Date.parse(a.uploadedDate) < Date.parse(b.uploadedDate)) {
+        const sorted = Items.slice().sort((a: CartItem, b: CartItem) => {
+          if (
+            Date.parse(a.product.uploadedDate) <
+            Date.parse(b.product.uploadedDate)
+          ) {
             return -1;
           } else if (
-            Date.parse(a.uploadedDate) === Date.parse(b.uploadedDate)
+            Date.parse(a.product.uploadedDate) ===
+            Date.parse(b.product.uploadedDate)
           ) {
             return 0;
           } else {
@@ -37,10 +41,10 @@ function useSort(
         break;
       }
       case "price": {
-        const sorted = Items.slice().sort((a: ItemProps, b: ItemProps) => {
-          if (a.price < b.price) {
+        const sorted = Items.slice().sort((a: CartItem, b: CartItem) => {
+          if (a.product.price < b.product.price) {
             return -1;
-          } else if (a.price === b.price) {
+          } else if (a.product.price === b.product.price) {
             return 0;
           } else {
             return 1;

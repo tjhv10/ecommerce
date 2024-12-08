@@ -1,17 +1,14 @@
 import { Link } from "react-router-dom";
 import styles from "./mainNav.module.scss";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { CartContext } from "../../store/shopping-cart-context";
 
 function MainNavigation() {
-  const crtx = useContext(CartContext);
-  const [sum, setSum] = useState(0);
-  useEffect(() => {
-    const calSum = crtx.quantityHash.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0);
-    setSum(calSum);
-  }, [crtx]);
+  const { shoppingCart } = useContext(CartContext);
+  let sum: number = 0;
+  shoppingCart.forEach((element) => {
+    sum += element.quantity;
+  });
 
   return (
     <header>

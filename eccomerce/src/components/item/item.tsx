@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styles from "./item.module.scss";
 import { useContext } from "react";
 import { CartContext } from "../../store/shopping-cart-context";
+import { CartItem } from "../../App";
 
 export interface ItemProps {
   id: number;
@@ -16,37 +17,49 @@ export interface ItemProps {
   category: string;
 }
 
-const Item = ({ props }: { props: ItemProps }): JSX.Element => {
-  const crtx = useContext(CartContext);
-  const addItemToShoppingCart = (newItem: ItemProps) => {
-    const sameItem = crtx.items.filter(
-      (item: ItemProps) => item.id === newItem.id
-    );
-    if (sameItem.length == 0) {
-      crtx.items = [...crtx.items, newItem];
-      if (
-        isNaN(crtx.quantityHash[newItem.id]) ||
-        crtx.quantityHash[newItem.id] == 0
-      ) {
-        crtx.quantityHash[newItem.id] = 1;
+const Item = ({ props }: { props: CartItem }): JSX.Element => {
+  const { setShoppingCart } = useContext(CartContext);
+  const addItemToShoppingCart = (newItem: CartItem) => {
+    setShoppingCart((prevState) => {
+      console.log(prevState);
+      const sameItem = prevState.find(
+        ({ product }) => product.id === newItem.product.id
+      );
+      if (!sameItem) {
+        newItem.quantity = 1;
+        return [...prevState, newItem];
+      } else {
+        return prevState.map((item) => {
+          const newNewItem = item;
+          if (item.product.id === newItem.product.id) {
+            newNewItem.quantity++;
+          }
+          return item.product.id === newItem.product.id ? newNewItem : item;
+        });
       }
-    } else {
-      crtx.quantityHash[newItem.id]++;
-    }
+    });
   };
 
   return (
     <div className={styles.item}>
-      <div className={styles.hl}>{props.name}</div>
-      <div className={styles.cat}>{props.category}</div>
-      <div className={styles.des}>Description: {props.Description}</div>
+      <div className={styles.hl}>{props.product.name}</div>
+      <div className={styles.cat}>{props.product.category}</div>
+      <div className={styles.des}>Description: {props.product.Description}</div>
       <div>
-        {<img className={styles.img} src={props.img_url} alt="pic"></img>}
+        {
+          <img
+            className={styles.img}
+            src={props.product.img_url}
+            alt="pic"
+          ></img>
+        }
       </div>
-      <div className={styles.price}>Price: {props.price}$</div>
-      <div className={styles.sellerName}>Seller name: {props.Seller_name}</div>
+      <div className={styles.price}>Price: {props.product.price}$</div>
+      <div className={styles.sellerName}>
+        Seller name: {props.product.Seller_name}
+      </div>
       <div className={styles.uploadedDate}>
-        Uploaded date: {props.uploadedDate}
+        Uploaded date: {props.product.uploadedDate}
       </div>
       <button
         className={styles.buyB}
@@ -57,7 +70,7 @@ const Item = ({ props }: { props: ItemProps }): JSX.Element => {
       >
         Add to cart
       </button>
-      <Link to={{ pathname: "/prodact/" + props.id }}>
+      <Link to={{ pathname: "/prodact/" + props.product.id }}>
         <button className={styles.itemB}>Go to prodact</button>
       </Link>
     </div>

@@ -1,10 +1,15 @@
-import { createContext } from "react";
+import React from "react";
 import { ItemProps } from "../components/item/item";
 
-export const CartContext = createContext<{
-  items: ItemProps[];
-  quantityHash: number[];
+interface CartItem {
+  product: ItemProps;
+  quantity: number;
+}
+
+export const CartContext = React.createContext<{
+  shoppingCart: CartItem[];
+  setShoppingCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }>({
-  items: [],
-  quantityHash: [],
+  shoppingCart: [],
+  setShoppingCart: () => {},
 });

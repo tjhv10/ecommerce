@@ -1,38 +1,80 @@
 import styles from "./prodact.module.scss";
 import md from "../../assets/MOCK_DATA.json";
 import { useContext, useState } from "react";
-import { ItemProps } from "../../components/item/item";
 import { CartContext } from "../../store/shopping-cart-context";
 import { CartItem } from "../../App";
 
 function Prodact() {
   const { setShoppingCart, shoppingCart } = useContext(CartContext);
+
   const id = parseInt(window.location.href.split("/").slice(-1)[0]);
+  const itemprop: CartItem = {
+    product: {
+      id: md[id].id,
+      brand: md[id].manufacturer,
+      model: md[id].model,
+      name: md[id].manufacturer + md[id].model,
+      uploadedDate: md[id].uploaded_date,
+      Description: md[id].descreption,
+      price: md[id].price,
+      Seller_name: md[id].seller_name,
+      img_url: md[id].img_url,
+      category: md[id].category,
+    },
+    quantity: 1,
+  };
   const [buttons, setButtons] = useState(
-    shoppingCart[id].quantity === undefined ||
-      shoppingCart[id].quantity === 0 ? (
+    shoppingCart.find((element) => element.product.id === id) === undefined ||
+      shoppingCart.find((element) => element.product.id === id)?.quantity ===
+        0 ? (
       <div></div>
     ) : (
       <div>
         <button
-          className={styles.buyB}
+          className={styles.removeB}
           onClick={() => {
-            shoppingCart[id].quantity--;
-            if (shoppingCart[id].quantity === 0) {
-              removeItemFromCart(id, shoppingCart);
-              shoppingCart[id].quantity = 0;
-              setButtons(<></>);
-            }
-            // setQuantityHash(shoppingCart.quantity.slice());
+            const newItem = {
+              product: itemprop.product,
+              quantity: 1,
+            };
+            setShoppingCart((prevState) => {
+              const sameItem = prevState.find(
+                ({ product }) => product.id === id
+              );
+              console.log(sameItem);
+
+              if (!sameItem) {
+                newItem.quantity = 1;
+                return [...prevState, newItem];
+              } else {
+                return prevState.map((item) => {
+                  const newNewItem = item;
+                  if (item.product.id === id) {
+                    if (newNewItem.quantity === 1) {
+                      const newlist = shoppingCart.filter(
+                        (item) => item.product.id !== id
+                      );
+                      console.log(newlist);
+                      setShoppingCart(newlist);
+                      setButtons(<></>);
+                    }
+                    --newNewItem.quantity;
+                  }
+                  return item.product.id === id ? newNewItem : item;
+                });
+              }
+            });
           }}
         >
           -
         </button>
         <button
-          className={styles.buyB}
+          className={styles.removeB}
           onClick={() => {
-            shoppingCart[id].quantity++;
-            // setQuantityHash(shoppingCart.quantity.slice());
+            additempropToShoppingCart({
+              product: itemprop.product,
+              quantity: 1,
+            });
           }}
         >
           +
@@ -40,40 +82,30 @@ function Prodact() {
       </div>
     )
   );
-  const itemprop: ItemProps = {
-    id: md[id].id,
-    brand: md[id].manufacturer,
-    model: md[id].model,
-    name: md[id].manufacturer + md[id].model,
-    uploadedDate: md[id].uploaded_date,
-    Description: md[id].descreption,
-    price: md[id].price,
-    Seller_name: md[id].seller_name,
-    img_url: md[id].img_url,
-    category: md[id].category,
-  };
-  const removeItemFromCart = (ItemId: number, shoppingCart: CartItem[]) => {
-    setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
-  };
-  const addItemToShoppingCart = (newItem: CartItem) => {
-    const sameItem = shoppingCart.filter(
-      (item) => item.product.id === newItem.product.id
-    );
-    if (sameItem.length === 0) {
-      setShoppingCart([...shoppingCart, newItem]);
-      {
-        const element = shoppingCart.find((element) => element.product.id);
-        if (element) element.quantity = 1;
+
+  const additempropToShoppingCart = (newItem: CartItem) => {
+    setShoppingCart((prevState) => {
+      const sameItem = prevState.find(({ product }) => product.id === id);
+      console.log(sameItem);
+
+      if (!sameItem) {
+        newItem.quantity = 1;
+        return [...prevState, newItem];
+      } else {
+        return prevState.map((item) => {
+          const newNewItem = item;
+          if (item.product.id === id) {
+            newNewItem.quantity++;
+          }
+          return item.product.id === id ? newNewItem : item;
+        });
       }
-    } else {
-      const element = shoppingCart.find((element) => element.product.id);
-      if (element) element.quantity++;
-    }
+    });
   };
 
   return (
     <div className={styles.grid}>
-      <div className={styles.item}>
+      <div className={styles.itemprop}>
         <div className={styles.hl}>{md[id].manufacturer + md[id].model}</div>
         <div className={styles.cat}>{md[id].category}</div>
         <div className={styles.des}>Description: {md[id].descreption}</div>
@@ -86,31 +118,62 @@ function Prodact() {
           Uploaded date: {md[id].uploaded_date}
         </div>
         <div className={styles.uploadedDate}>
-          Items in cart: {shoppingCart[id].quantity}
+          item in cart: {shoppingCart[id] ? shoppingCart[id].quantity : 0}
         </div>
         <button
           className={styles.buyB}
           onClick={() => {
-            addItemToShoppingCart({ product: itemprop, quantity: 1 });
+            additempropToShoppingCart({
+              product: itemprop.product,
+              quantity: 1,
+            });
             setButtons(
               <div>
                 <button
-                  className={styles.buyB}
+                  className={styles.removeB}
                   onClick={() => {
-                    shoppingCart[id].quantity--;
-                    if (shoppingCart[id].quantity === 0) {
-                      removeItemFromCart(id, shoppingCart);
-                      shoppingCart[id].quantity = 0;
-                      setButtons(<></>);
-                    }
+                    const newItem = {
+                      product: itemprop.product,
+                      quantity: 1,
+                    };
+                    setShoppingCart((prevState) => {
+                      const sameItem = prevState.find(
+                        ({ product }) => product.id === id
+                      );
+                      console.log(sameItem);
+
+                      if (!sameItem) {
+                        newItem.quantity = 1;
+                        return [...prevState, newItem];
+                      } else {
+                        return prevState.map((item) => {
+                          const newNewItem = item;
+                          if (item.product.id === id) {
+                            if (newNewItem.quantity === 1) {
+                              const newlist = shoppingCart.filter(
+                                (item) => item.product.id !== id
+                              );
+                              console.log(newlist);
+                              setShoppingCart(newlist);
+                              setButtons(<></>);
+                            }
+                            --newNewItem.quantity;
+                          }
+                          return item.product.id === id ? newNewItem : item;
+                        });
+                      }
+                    });
                   }}
                 >
                   -
                 </button>
                 <button
-                  className={styles.buyB}
+                  className={styles.removeB}
                   onClick={() => {
-                    shoppingCart[id].quantity++;
+                    additempropToShoppingCart({
+                      product: itemprop.product,
+                      quantity: 1,
+                    });
                   }}
                 >
                   +

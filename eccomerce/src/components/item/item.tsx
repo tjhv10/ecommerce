@@ -21,7 +21,6 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
   const { setShoppingCart } = useContext(CartContext);
   const addItemToShoppingCart = (newItem: CartItem) => {
     setShoppingCart((prevState) => {
-      console.log(prevState);
       const sameItem = prevState.find(
         ({ product }) => product.id === newItem.product.id
       );
@@ -65,7 +64,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
         className={styles.buyB}
         onClick={() => {
           addItemToShoppingCart(props);
-          alert("Added item to cart!");
+          // alert("Added item to cart!");
         }}
       >
         Add to cart

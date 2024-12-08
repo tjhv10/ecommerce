@@ -116,7 +116,10 @@ function Prodact() {
           Uploaded date: {md[id].uploaded_date}
         </div>
         <div className={styles.uploadedDate}>
-          item in cart: {shoppingCart[id] ? shoppingCart[id].quantity : 0}
+          item in cart:{" "}
+          {shoppingCart.find(({ product }) => product.id === id)
+            ? shoppingCart.find(({ product }) => product.id === id)?.quantity
+            : 0}
         </div>
         <button
           className={styles.buyB}

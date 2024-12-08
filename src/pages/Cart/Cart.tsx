@@ -20,10 +20,12 @@ function Cart() {
 
   const [price, setPrice] = useState(sum);
   useEffect(() => {
-    if (price === 0) {
-      setShoppingCart([]);
-    }
-  }, [price, setShoppingCart]);
+    const filterdShoppingCart = shoppingCart.filter(
+      (item) => item.quantity > 0
+    );
+    setShoppingCart(filterdShoppingCart);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <div>Total price: {price}$</div>

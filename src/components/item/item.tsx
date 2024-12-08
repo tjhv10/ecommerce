@@ -6,14 +6,14 @@ import { CartItem } from "../../App";
 
 export interface ItemProps {
   id: number;
-  brand: string;
+  manufacturer: string;
   model: string;
   name: string;
   uploadedDate: string;
-  Description: string;
+  description: string;
   price: number;
-  Seller_name: string;
-  img_url: string;
+  sellerName: string;
+  imgUrl: string;
   category: string;
 }
 
@@ -27,15 +27,15 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       if (!sameItem) {
         newItem.quantity = 1;
         return [...prevState, newItem];
-      } else {
-        return prevState.map((item) => {
-          const newNewItem = item;
-          if (item.product.id === newItem.product.id) {
-            newNewItem.quantity++;
-          }
-          return item.product.id === newItem.product.id ? newNewItem : item;
-        });
       }
+
+      return prevState.map((item) => {
+        const newItem = item;
+        if (item.product.id === newItem.product.id) {
+          newItem.quantity++;
+        }
+        return item.product.id === newItem.product.id ? newItem : item;
+      });
     });
   };
 
@@ -43,19 +43,19 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
     <div className={styles.item}>
       <div className={styles.hl}>{props.product.name}</div>
       <div className={styles.cat}>{props.product.category}</div>
-      <div className={styles.des}>Description: {props.product.Description}</div>
+      <div className={styles.des}>Description: {props.product.description}</div>
       <div>
         {
           <img
             className={styles.img}
-            src={props.product.img_url}
+            src={props.product.imgUrl}
             alt="pic"
           ></img>
         }
       </div>
       <div className={styles.price}>Price: {props.product.price}$</div>
       <div className={styles.sellerName}>
-        Seller name: {props.product.Seller_name}
+        Seller name: {props.product.sellerName}
       </div>
       <div className={styles.uploadedDate}>
         Uploaded date: {props.product.uploadedDate}
@@ -64,7 +64,6 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
         className={styles.buyB}
         onClick={() => {
           addItemToShoppingCart(props);
-          // alert("Added item to cart!");
         }}
       >
         Add to cart

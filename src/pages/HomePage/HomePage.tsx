@@ -1,6 +1,7 @@
-import Items from "../../components/items/items.tsx";
+import Items from "../../components/items/Items";
 
 function HomePage() {
   return <Items />;
 }
+
 export default HomePage;

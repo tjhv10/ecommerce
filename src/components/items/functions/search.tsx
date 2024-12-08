@@ -10,14 +10,9 @@ const search = (
 ) => {
   const result = Items.filter(
     (Item) =>
-      Item.product.name.toLowerCase().substring(0, phrase.length) ===
-        phrase.toLowerCase().trim() ||
-      Item.product.category.toLowerCase().substring(0, phrase.length) ===
-        phrase.toLowerCase().trim() ||
-      Item.product.model.toLowerCase().substring(0, phrase.length) ===
-        phrase.toLowerCase().trim() ||
-      Item.product.brand.toLowerCase().substring(0, phrase.length) ===
-        phrase.toLowerCase().trim()
+      Item.product.name.toLowerCase().includes(phrase) ||
+      Item.product.category.toLowerCase().includes(phrase) ||
+      Item.product.model.toLowerCase().includes(phrase)
   );
   setItems(result);
   setSort("id");

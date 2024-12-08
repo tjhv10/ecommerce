@@ -2,23 +2,40 @@ import React, { useState, useRef, ReactElement } from "react";
 import styles from "./items.module.scss";
 import Item, { ItemProps } from "../item/item.tsx";
 import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
-import useInitAllItems from "./hooks/useInitAllItems.tsx";
 import useSetFilterChoose from "./hooks/useSetFilterChoose";
 import useSort from "./hooks/useSort.tsx";
 import search from "./functions/search.tsx";
+import md from "../../assets/MOCK_DATA.json";
+
 interface CartItem {
   product: ItemProps;
   quantity: number;
 }
-const Items: React.FC = () => {
-  const alli: CartItem[] = [];
 
+export enum CategoryEnum {
+  "No filter" = "No filter",
+  "Category" = "Category",
+  "Price" = "Price",
+  "Uploaded date" = "Uploaded date",
+}
+
+const Items: React.FC = () => {
   const [category, setCategory] = useState<string>("");
-  const [subcategory, setSubcategory] = useState("");
-  const [Items, setItems] = useState<CartItem[]>(alli);
+  const [subcategory, setSubcategory] = useState<CategoryEnum>(
+    CategoryEnum["No filter"]
+  );
+  const alli: CartItem[] = [];
+  for (let i = 0; i < md.length; i++) {
+    const item = {
+      product: md[i],
+      quantity: 1,
+    };
+    alli.push(item);
+  }
+  const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<string>("");
-  const [filter_chooseSelect, setFilter_chooseSelect] =
-    useState<ReactElement>();
+  // TODO: change this to boolean instead
+  const [filterChooseSelect, setFilterChooseSelect] = useState<ReactElement>();
   const filterChooseRef = useRef<HTMLSelectElement>(null);
   const sortRef = useRef<HTMLSelectElement>(null);
   const filterRef = useRef<HTMLSelectElement>(null);
@@ -27,7 +44,7 @@ const Items: React.FC = () => {
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
-  useInitAllItems(alli);
+
   useSetItemsCategory(
     addItem,
     subcategory,
@@ -35,7 +52,7 @@ const Items: React.FC = () => {
     category,
     setSubcategory,
     filterChooseRef,
-    setFilter_chooseSelect
+    setFilterChooseSelect
   );
   useSort(Items, sort, setItems);
   useSetFilterChoose(category, filterChooseRef, setSubcategory, subcategory);
@@ -46,23 +63,18 @@ const Items: React.FC = () => {
         <select
           className={styles.filtersBarItem}
           ref={filterRef}
-          name="filter"
-          id="filter"
           onChange={() => {
             if (filterRef.current) setCategory(filterRef.current.value);
           }}
         >
-          <option value="">No filter</option>
-          <option value="Category">Category</option>
-          <option value="Price">Price</option>
-          <option value="Uploaded date">Uploaded date</option>
+          {Object.values(CategoryEnum).map((filter) => (
+            <option value={filter}>{filter}</option>
+          ))}
         </select>
-        {filter_chooseSelect}
+        {filterChooseSelect}
         <select
           ref={sortRef}
           className={styles.filtersBarItem}
-          name="sort"
-          id="sort"
           onChange={() => {
             if (sortRef.current) setSort(sortRef.current.value);
           }}
@@ -74,7 +86,6 @@ const Items: React.FC = () => {
         <div className={styles.filtersBarItem}>
           <input
             ref={searchRef}
-            id="search"
             type="text"
             placeholder="Search..."
             onChange={() => {

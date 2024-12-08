@@ -4,10 +4,10 @@ import "./App.css";
 import RootLayout from "./pages/RootLayout/RootLayout";
 import HomePage from "./pages/HomePage/HomePage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
-import Prodact from "./pages/prodact/Prodact";
+import Prodact from "./pages/Prodact/Prodact";
 import { useState } from "react";
 import { CartContext } from "./store/shopping-cart-context";
-import { ItemProps } from "./components/item/item";
+import { ItemProps } from "./components/Item/Item";
 import Cart from "./pages/Cart/Cart";
 
 export interface CartItem {

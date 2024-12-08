@@ -2,14 +2,16 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { CartItem } from "../../../App";
 
 function useSort(
-  Items: CartItem[],
+  items: CartItem[],
   sort: string,
   setItems: Dispatch<SetStateAction<CartItem[]>>
 ) {
   useEffect(() => {
     switch (sort) {
+      // TODO: add enum for sort type
       case "id": {
-        const sorted = Items.slice().sort((a: CartItem, b: CartItem) => {
+        const sorted = items.slice().sort((a: CartItem, b: CartItem) => {
+          // TODO: tkae this out to external function
           if (a.product.id < b.product.id) {
             return -1;
           } else if (a.product.id === b.product.id) {
@@ -22,16 +24,13 @@ function useSort(
         break;
       }
       case "date": {
-        const sorted = Items.slice().sort((a: CartItem, b: CartItem) => {
-          if (
-            Date.parse(a.product.uploadedDate) <
-            Date.parse(b.product.uploadedDate)
-          ) {
+        const sorted = items.slice().sort((a: CartItem, b: CartItem) => {
+          const dateA = Date.parse(a.product.uploadedDate);
+          const dateB = Date.parse(b.product.uploadedDate);
+
+          if (dateA < dateB) {
             return -1;
-          } else if (
-            Date.parse(a.product.uploadedDate) ===
-            Date.parse(b.product.uploadedDate)
-          ) {
+          } else if (dateA === dateB) {
             return 0;
           } else {
             return 1;
@@ -41,7 +40,7 @@ function useSort(
         break;
       }
       case "price": {
-        const sorted = Items.slice().sort((a: CartItem, b: CartItem) => {
+        const sorted = items.slice().sort((a: CartItem, b: CartItem) => {
           if (a.product.price < b.product.price) {
             return -1;
           } else if (a.product.price === b.product.price) {

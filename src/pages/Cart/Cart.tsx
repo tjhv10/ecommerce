@@ -37,7 +37,7 @@ function Cart() {
             <div>
               <img
                 className={styles.img}
-                src={item.product.img_url}
+                src={item.product.imgUrl}
                 alt={`${item.product.name} pic`}
               />
             </div>

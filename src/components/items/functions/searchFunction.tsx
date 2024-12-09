@@ -1,11 +1,11 @@
-import { SetStateAction, RefObject, Dispatch } from "react";
+import { RefObject, Dispatch } from "react";
 import { CartItem } from "../../../App";
 
 const searchFunction = (
   phrase: string,
   setItems: Dispatch<React.SetStateAction<CartItem[]>>,
   Items: CartItem[],
-  setSort: { (value: SetStateAction<string>): void; (arg0: string): void },
+  setSort: Dispatch<React.SetStateAction<string>>,
   sortRef: RefObject<HTMLSelectElement>
 ) => {
   const result = Items.filter(

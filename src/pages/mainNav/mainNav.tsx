@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./mainNav.module.scss";
 import { useContext } from "react";
-import { CartContext } from "../../store/shopping-cart-context";
+import { CartContext } from "../../Store/shopping-cart-context";
 
 function MainNavigation() {
   const { shoppingCart } = useContext(CartContext);

@@ -1,13 +1,6 @@
-import {
-  Dispatch,
-  JSXElementConstructor,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-} from "react";
+import { Dispatch, ReactElement, SetStateAction, useEffect } from "react";
 import md from "../../../assets/MOCK_DATA.json";
 import styles from "../items.module.scss";
-import { JSX } from "react/jsx-runtime";
 import { CartItem } from "../../../App";
 import { subcategoryEnum } from "./useSetFilterChoose";
 enum CategoryEnum {
@@ -23,15 +16,7 @@ function useSetItemsCategory(
   category: string,
   setSubcategory: Dispatch<subcategoryEnum>,
   filterChooseRef: React.RefObject<HTMLSelectElement>,
-  setFilter_chooseSelect: {
-    (
-      value: SetStateAction<
-        | ReactElement<unknown, string | JSXElementConstructor<unknown>>
-        | undefined
-      >
-    ): void;
-    (arg0: JSX.Element): void;
-  }
+  setFilter_chooseSelect: Dispatch<ReactElement>
 ) {
   useEffect(() => {
     setItems([]);

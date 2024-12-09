@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { CartContext } from "../../store/shopping-cart-context";
+import { Dispatch, useContext, useEffect, useState } from "react";
+import { CartContext } from "../../Store/shopping-cart-context";
 import styles from "./Cart.module.scss";
 import { CartItem } from "../../App";
 
 const removeItemFromCart = (
   ItemId: number,
   shoppingCart: CartItem[],
-  setShoppingCart: (arg0: CartItem[]) => void
+  setShoppingCart: Dispatch<React.SetStateAction<CartItem[]>>
 ) => {
   setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
 };
@@ -110,8 +110,7 @@ function Cart() {
                   (element) => element.product.id === item.product.id
                 );
                 if (element) {
-                  setPrice(price - element.quantity * item.product.price);
-                  element.quantity = 0;
+                  setPrice(price - element.quantity * element.product.price);
                 }
                 removeItemFromCart(
                   item.product.id,

@@ -1,72 +1,73 @@
 import styles from "./prodact.module.scss";
 import md from "../../assets/MOCK_DATA.json";
 import { useContext, useState } from "react";
-import { CartContext } from "../../store/shopping-cart-context";
+import { CartContext } from "../../Store/shopping-cart-context";
 import { CartItem } from "../../App";
 
 function Prodact() {
   const { setShoppingCart, shoppingCart } = useContext(CartContext);
+  const buttonsVar = (
+    <div>
+      <button
+        className={styles.removeB}
+        onClick={() => {
+          const newItem = {
+            product: itemprop.product,
+            quantity: 1,
+          };
+          setShoppingCart((prevState) => {
+            const sameItem = prevState.find(({ product }) => product.id === id);
+            console.log(sameItem);
 
+            if (!sameItem) {
+              newItem.quantity = 1;
+              return [...prevState, newItem];
+            } else {
+              return prevState.map((item) => {
+                const newNewItem = item;
+                if (item.product.id === id) {
+                  if (newNewItem.quantity === 1) {
+                    const newlist = shoppingCart.filter(
+                      (item) => item.product.id !== id
+                    );
+                    setShoppingCart(newlist);
+                    setButtons(<></>);
+                  }
+                  --newNewItem.quantity;
+                }
+                return item.product.id === id ? newNewItem : item;
+              });
+            }
+          });
+        }}
+      >
+        -
+      </button>
+      <button
+        className={styles.removeB}
+        onClick={() => {
+          addItemPropToShoppingCart({
+            product: itemprop.product,
+            quantity: 1,
+          });
+        }}
+      >
+        +
+      </button>
+    </div>
+  );
   const id = parseInt(window.location.href.split("/").slice(-1)[0]);
   const itemprop: CartItem = {
     product: md[id],
     quantity: 1,
   };
-
   const [buttons, setButtons] = useState(
     shoppingCart.find((element) => element.product.id === id) === undefined ||
       shoppingCart.find((element) => element.product.id === id)?.quantity ===
         0 ? (
       <div></div>
     ) : (
-      <div>
-        <button
-          className={styles.removeB}
-          onClick={() => {
-            const newItem = {
-              product: itemprop.product,
-              quantity: 1,
-            };
-            setShoppingCart((prevState) => {
-              const sameItem = prevState.find(
-                ({ product }) => product.id === id
-              );
-              if (!sameItem) {
-                newItem.quantity = 1;
-                return [...prevState, newItem];
-              } else {
-                return prevState.map((item) => {
-                  const newNewItem = item;
-                  if (item.product.id === id) {
-                    if (newNewItem.quantity === 1) {
-                      const newlist = shoppingCart.filter(
-                        (item) => item.product.id !== id
-                      );
-                      setShoppingCart(newlist);
-                      setButtons(<></>);
-                    }
-                    --newNewItem.quantity;
-                  }
-                  return item.product.id === id ? newNewItem : item;
-                });
-              }
-            });
-          }}
-        >
-          -
-        </button>
-        <button
-          className={styles.removeB}
-          onClick={() => {
-            addItemPropToShoppingCart({
-              product: itemprop.product,
-              quantity: 1,
-            });
-          }}
-        >
-          +
-        </button>
-      </div>
+      buttonsVar
     )
   );
 
@@ -116,58 +117,7 @@ function Prodact() {
               product: itemprop.product,
               quantity: 1,
             });
-            setButtons(
-              <div>
-                <button
-                  className={styles.removeB}
-                  onClick={() => {
-                    const newItem = {
-                      product: itemprop.product,
-                      quantity: 1,
-                    };
-                    setShoppingCart((prevState) => {
-                      const sameItem = prevState.find(
-                        ({ product }) => product.id === id
-                      );
-                      console.log(sameItem);
-
-                      if (!sameItem) {
-                        newItem.quantity = 1;
-                        return [...prevState, newItem];
-                      } else {
-                        return prevState.map((item) => {
-                          const newNewItem = item;
-                          if (item.product.id === id) {
-                            if (newNewItem.quantity === 1) {
-                              const newlist = shoppingCart.filter(
-                                (item) => item.product.id !== id
-                              );
-                              setShoppingCart(newlist);
-                              setButtons(<></>);
-                            }
-                            --newNewItem.quantity;
-                          }
-                          return item.product.id === id ? newNewItem : item;
-                        });
-                      }
-                    });
-                  }}
-                >
-                  -
-                </button>
-                <button
-                  className={styles.removeB}
-                  onClick={() => {
-                    addItemPropToShoppingCart({
-                      product: itemprop.product,
-                      quantity: 1,
-                    });
-                  }}
-                >
-                  +
-                </button>
-              </div>
-            );
+            setButtons(buttonsVar);
           }}
         >
           Add to cart

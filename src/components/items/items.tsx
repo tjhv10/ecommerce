@@ -70,7 +70,9 @@ const Items: React.FC = () => {
           }
         >
           {Object.values(CategoryEnum).map((filter) => (
-            <option value={filter}>{filter}</option>
+            <option value={filter} key={filter}>
+              {filter}
+            </option>
           ))}
         </select>
         {filterChooseSelect}

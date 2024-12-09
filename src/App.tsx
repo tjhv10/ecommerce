@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Prodact from "./pages/Prodact/Prodact";
 import { useState } from "react";
-import { CartContext } from "./store/shopping-cart-context";
+import { CartContext } from "./Store/shopping-cart-context";
 import { ItemProps } from "./components/Item/Item";
 import Cart from "./pages/Cart/Cart";
 

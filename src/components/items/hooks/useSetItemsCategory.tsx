@@ -10,7 +10,12 @@ import styles from "../items.module.scss";
 import { JSX } from "react/jsx-runtime";
 import { CartItem } from "../../../App";
 import { subcategoryEnum } from "./useSetFilterChoose";
-
+enum CategoryEnum {
+  "No filter" = "No filter",
+  "Category" = "Category",
+  "Uploaded date" = "Uploaded date",
+  "Price" = "Price",
+}
 function useSetItemsCategory(
   addItem: (item: CartItem) => void,
   subcategory: string | undefined,
@@ -36,18 +41,17 @@ function useSetItemsCategory(
         quantity: 1,
       };
       switch (category) {
-        // TODO: add enum
-        case "No filter": {
+        case CategoryEnum["No filter"]: {
           addItem(item);
           break;
         }
-        case "Category": {
+        case CategoryEnum["Category"]: {
           if (item.product.category === subcategory) {
             addItem(item);
           }
           break;
         }
-        case "Price": {
+        case CategoryEnum["Price"]: {
           const [lowPrice, highPrice] = subcategory!.split("-");
           if (
             item.product.price >= parseInt(lowPrice) &&
@@ -56,19 +60,17 @@ function useSetItemsCategory(
             addItem(item);
           break;
         }
-        case "Uploaded date": {
+        case CategoryEnum["Uploaded date"]: {
           if (Date.parse(item.product.uploadedDate) >= Date.parse(subcategory!))
             addItem(item);
           break;
         }
       }
       switch (category) {
-        case "No filter": {
+        case CategoryEnum["No filter"]: {
           setFilter_chooseSelect(<></>);
           setSubcategory(
-            subcategoryEnum[
-              filterChooseRef.current?.value as keyof typeof subcategoryEnum
-            ]
+            subcategoryEnum["No filter" as keyof typeof subcategoryEnum]
           );
           break;
         }
@@ -84,13 +86,6 @@ function useSetItemsCategory(
                   : ""
               }
               onChange={() => {
-                console.log(
-                  subcategoryEnum[
-                    filterChooseRef.current
-                      ?.value as keyof typeof subcategoryEnum
-                  ]
-                );
-
                 setSubcategory(
                   subcategoryEnum[
                     filterChooseRef.current

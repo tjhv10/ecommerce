@@ -38,7 +38,6 @@ const Items: React.FC = () => {
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<string>("");
   const [search, setSearch] = useState<string>("");
-  // TODO: change this to boolean instead
   const [filterChooseSelect, setFilterChooseSelect] = useState<ReactElement>();
   const filterChooseRef = useRef<HTMLSelectElement>(null);
   const sortRef = useRef<HTMLSelectElement>(null);
@@ -99,14 +98,6 @@ const Items: React.FC = () => {
               }
             }}
           ></input>
-          {/* <button
-            onClick={() => {
-              setItems(alli);
-              searchFunction(search, setItems, Items, setSort, sortRef);
-            }}
-          >
-            search
-          </button> */}
         </div>
       </div>
       <div className={styles.content}>

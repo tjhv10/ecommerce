@@ -1,6 +1,10 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { CartItem } from "../../../App";
-
+enum SortEnum {
+  "id" = "id",
+  "date" = "date",
+  "price" = "price",
+}
 function useSort(
   items: CartItem[],
   sort: string,
@@ -17,16 +21,14 @@ function useSort(
       }
     }
     switch (sort) {
-      // TODO: add enum for sort type
-      case "id": {
+      case SortEnum.id: {
         const sorted = items.slice().sort((a: CartItem, b: CartItem) => {
-          // TODO: tkae this out to external function
           return sortFunction(a.product.id, b.product.id);
         });
         setItems(sorted);
         break;
       }
-      case "date": {
+      case SortEnum.date: {
         const sorted = items.slice().sort((a: CartItem, b: CartItem) => {
           const dateA = Date.parse(a.product.uploadedDate);
           const dateB = Date.parse(b.product.uploadedDate);
@@ -36,7 +38,7 @@ function useSort(
         setItems(sorted);
         break;
       }
-      case "price": {
+      case SortEnum.price: {
         const sorted = items.slice().sort((a: CartItem, b: CartItem) => {
           return sortFunction(a.product.price, b.product.price);
         });

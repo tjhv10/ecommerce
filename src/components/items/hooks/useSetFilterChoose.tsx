@@ -29,7 +29,6 @@ function useSetFilterChoose(
     }
     const mySet = new Set<string>();
     if (category === "Category") {
-      // TOOD: change this to map
       for (let i = 0; i <= 1; i++) mySet.add(Object.values(subcategoryEnum)[i]);
     } else if (category === "Price") {
       for (let i = 2; i <= 5; i++) {

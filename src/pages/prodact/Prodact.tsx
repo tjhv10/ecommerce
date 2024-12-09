@@ -13,7 +13,6 @@ function Prodact() {
     quantity: 1,
   };
 
-  // TODO: use boolean instead
   const [buttons, setButtons] = useState(
     shoppingCart.find((element) => element.product.id === id) === undefined ||
       shoppingCart.find((element) => element.product.id === id)?.quantity ===
@@ -43,7 +42,6 @@ function Prodact() {
                       const newlist = shoppingCart.filter(
                         (item) => item.product.id !== id
                       );
-                      console.log(newlist);
                       setShoppingCart(newlist);
                       setButtons(<></>);
                     }
@@ -144,7 +142,6 @@ function Prodact() {
                               const newlist = shoppingCart.filter(
                                 (item) => item.product.id !== id
                               );
-                              console.log(newlist);
                               setShoppingCart(newlist);
                               setButtons(<></>);
                             }

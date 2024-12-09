@@ -4,6 +4,8 @@ import Item, { ItemProps } from "../Item/Item.tsx";
 import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
 import useSetFilterChoose, {
   subcategoryEnum,
+  PriceEnum,
+  DateEnum,
 } from "./hooks/useSetFilterChoose.tsx";
 import useSort from "./hooks/useSort.tsx";
 import md from "../../assets/MOCK_DATA.json";
@@ -32,9 +34,9 @@ const Items: React.FC = () => {
   const [category, setCategory] = useState<CategoryEnum>(
     CategoryEnum["No filter"]
   );
-  const [subcategory, setSubcategory] = useState<subcategoryEnum>(
-    subcategoryEnum.Accessories
-  );
+  const [subcategory, setSubcategory] = useState<
+    subcategoryEnum | PriceEnum | DateEnum | undefined
+  >();
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<string>("");
   const [search, setSearch] = useState<string>("");

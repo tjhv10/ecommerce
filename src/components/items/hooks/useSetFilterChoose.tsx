@@ -2,10 +2,14 @@ import { Dispatch, RefObject, useEffect } from "react";
 export enum subcategoryEnum {
   "Accessories" = "Accessories",
   "Phones" = "Phones",
+}
+export enum PriceEnum {
   "0-500" = "0-500",
   "500-1000" = "500-1000",
   "1000-1500" = "1000-1500",
   "1500-2000" = "1500-2000",
+}
+export enum DateEnum {
   "1/1/2015" = "1/1/2015",
   "1/1/2016" = "1/1/2016",
   "1/1/2017" = "1/1/2017",
@@ -15,28 +19,37 @@ export enum subcategoryEnum {
   "1/1/2021" = "1/1/2021",
   "1/1/2022" = "1/1/2022",
 }
-
 function useSetFilterChoose(
   category: string,
   filterChooseRef: RefObject<HTMLSelectElement>,
-  setSubcategory: Dispatch<React.SetStateAction<subcategoryEnum>>,
-  subcategory: string
+  setSubcategory: Dispatch<
+    React.SetStateAction<DateEnum | PriceEnum | subcategoryEnum | undefined>
+  >,
+  subcategory: string | undefined
 ) {
   useEffect(() => {
     if (filterChooseRef.current) {
       filterChooseRef.current.innerHTML = "No filter";
     }
     const mySet = new Set<string>();
-    if (category === "Category") {
-      for (let i = 0; i <= 1; i++) mySet.add(Object.values(subcategoryEnum)[i]);
-    } else if (category === "Price") {
-      for (let i = 2; i <= 5; i++) {
-        mySet.add(Object.values(subcategoryEnum)[i]);
-      }
-    } else if (category === "Uploaded date") {
-      for (let i = 6; i <= 13; i++) {
-        mySet.add(Object.values(subcategoryEnum)[i]);
-      }
+    switch (category) {
+      case "Price":
+        for (const price in PriceEnum) {
+          mySet.add(price);
+        }
+        break;
+      case "Category":
+        for (const cat in subcategoryEnum) {
+          mySet.add(cat);
+        }
+        break;
+      case "Uploaded date":
+        for (const date in DateEnum) {
+          // console.log(date);
+
+          mySet.add(date);
+        }
+        break;
     }
     mySet.forEach(function (value) {
       if (filterChooseRef.current) {
@@ -56,10 +69,10 @@ function useSetFilterChoose(
         setSubcategory(subcategoryEnum.Accessories);
         break;
       case "Price":
-        setSubcategory(subcategoryEnum["0-500"]);
+        setSubcategory(PriceEnum["0-500"]);
         break;
       case "Uploaded date":
-        setSubcategory(subcategoryEnum["1/1/2015"]);
+        setSubcategory(DateEnum["1/1/2015"]);
         break;
       default:
         break;

@@ -1,7 +1,9 @@
-import { Dispatch, useContext, useEffect, useState } from "react";
+import { Dispatch, useContext, useState } from "react";
 import { CartContext } from "../../Store/shopping-cart-context";
 import styles from "./Cart.module.scss";
 import { CartItem } from "../../App";
+import { addItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
+import { removeItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
 
 const removeItemFromCart = (
   ItemId: number,
@@ -10,38 +12,7 @@ const removeItemFromCart = (
 ) => {
   setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
 };
-const addItemToShoppingCart = (
-  shoppingCart: CartItem[],
-  newItem: CartItem
-): CartItem[] => {
-  const sameItem = shoppingCart.find(
-    ({ product }) => product.id === newItem.product.id
-  );
 
-  if (!sameItem) {
-    return [...shoppingCart, { ...newItem, quantity: 1 }];
-  }
-
-  return shoppingCart.map((item) =>
-    item.product.id === newItem.product.id
-      ? { ...item, quantity: item.quantity + 1 }
-      : item
-  );
-};
-const removeItemToShoppingCart = (
-  shoppingCart: CartItem[],
-  newItem: CartItem
-): CartItem[] => {
-  if (newItem.quantity === 1)
-    return shoppingCart.filter(
-      (items) => items.product.id !== newItem.product.id
-    );
-  return shoppingCart.map((item) =>
-    item.product.id === newItem.product.id
-      ? { ...item, quantity: item.quantity - 1 }
-      : item
-  );
-};
 function Cart() {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
   let sum = 0;
@@ -50,13 +21,6 @@ function Cart() {
   });
 
   const [price, setPrice] = useState(sum);
-  useEffect(() => {
-    const filterdShoppingCart = shoppingCart.filter(
-      (item) => item.quantity > 0
-    );
-    setShoppingCart(filterdShoppingCart);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
     <>
       <div>Total price: {price}$</div>

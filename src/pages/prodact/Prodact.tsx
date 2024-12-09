@@ -3,6 +3,8 @@ import md from "../../assets/MOCK_DATA.json";
 import { useContext } from "react";
 import { CartItem } from "../../App";
 import { CartContext } from "../../Store/shopping-cart-context";
+import { addItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
+import { removeItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
 
 function Prodact() {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
@@ -12,37 +14,6 @@ function Prodact() {
     quantity: shoppingCart.find((element) => element.product.id === id)
       ? shoppingCart.find((element) => element.product.id === id)!.quantity
       : 1,
-  };
-
-  const addItemToShoppingCart = (
-    shoppingCart: CartItem[],
-    newItem: CartItem
-  ): CartItem[] => {
-    const sameItem = shoppingCart.find(
-      ({ product }) => product.id === newItem.product.id
-    );
-    if (!sameItem) {
-      return [...shoppingCart, newItem];
-    }
-    return shoppingCart.map((item) =>
-      item.product.id === newItem.product.id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
-  };
-  const removeItemToShoppingCart = (
-    shoppingCart: CartItem[],
-    newItem: CartItem
-  ): CartItem[] => {
-    if (newItem.quantity === 1)
-      return shoppingCart.filter(
-        (items) => items.product.id !== newItem.product.id
-      );
-    return shoppingCart.map((item) =>
-      item.product.id === newItem.product.id
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    );
   };
 
   return (

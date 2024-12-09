@@ -2,7 +2,7 @@ import { Dispatch, ReactElement, SetStateAction, useEffect } from "react";
 import md from "../../../assets/MOCK_DATA.json";
 import styles from "../items.module.scss";
 import { CartItem } from "../../../App";
-import { subcategoryEnum } from "./useSetFilterChoose";
+import { subcategoryEnum, DateEnum, PriceEnum } from "./useSetFilterChoose";
 enum CategoryEnum {
   "No filter" = "No filter",
   "Category" = "Category",
@@ -11,10 +11,10 @@ enum CategoryEnum {
 }
 function useSetItemsCategory(
   addItem: (item: CartItem) => void,
-  subcategory: string | undefined,
+  subcategory: subcategoryEnum | DateEnum | PriceEnum | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
   category: string,
-  setSubcategory: Dispatch<subcategoryEnum>,
+  setSubcategory: Dispatch<subcategoryEnum | DateEnum | PriceEnum | undefined>,
   filterChooseRef: React.RefObject<HTMLSelectElement>,
   setFilter_chooseSelect: Dispatch<ReactElement>
 ) {
@@ -71,12 +71,30 @@ function useSetItemsCategory(
                   : ""
               }
               onChange={() => {
-                setSubcategory(
-                  subcategoryEnum[
-                    filterChooseRef.current
-                      ?.value as keyof typeof subcategoryEnum
-                  ]
-                );
+                switch (category) {
+                  case CategoryEnum.Category:
+                    setSubcategory(
+                      subcategoryEnum[
+                        filterChooseRef.current
+                          ?.value as keyof typeof subcategoryEnum
+                      ]
+                    );
+                    break;
+                  case CategoryEnum.Price:
+                    setSubcategory(
+                      PriceEnum[
+                        filterChooseRef.current?.value as keyof typeof PriceEnum
+                      ]
+                    );
+                    break;
+                  case CategoryEnum["Uploaded date"]:
+                    setSubcategory(
+                      DateEnum[
+                        filterChooseRef.current?.value as keyof typeof DateEnum
+                      ]
+                    );
+                    break;
+                }
               }}
             />
           );

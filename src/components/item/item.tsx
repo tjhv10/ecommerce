@@ -3,6 +3,7 @@ import styles from "./item.module.scss";
 import { useContext } from "react";
 import { CartContext } from "../../Store/shopping-cart-context";
 import { CartItem } from "../../App";
+import { addItemToShoppingCart } from "./addAndRemoveItems";
 
 export interface ItemProps {
   id: number;
@@ -19,24 +20,6 @@ export interface ItemProps {
 
 const Item = ({ props }: { props: CartItem }): JSX.Element => {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
-  const addItemToShoppingCart = (
-    shoppingCart: CartItem[],
-    newItem: CartItem
-  ): CartItem[] => {
-    const sameItem = shoppingCart.find(
-      ({ product }) => product.id === newItem.product.id
-    );
-
-    if (!sameItem) {
-      return [...shoppingCart, { ...newItem, quantity: 1 }];
-    }
-
-    return shoppingCart.map((item) =>
-      item.product.id === newItem.product.id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
-  };
 
   return (
     <div className={styles.item}>

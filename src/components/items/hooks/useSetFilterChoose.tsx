@@ -45,8 +45,6 @@ function useSetFilterChoose(
         break;
       case "Uploaded date":
         for (const date in DateEnum) {
-          // console.log(date);
-
           mySet.add(date);
         }
         break;
@@ -77,7 +75,6 @@ function useSetFilterChoose(
       default:
         break;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  }, [category, filterChooseRef, setSubcategory]);
 }
 export default useSetFilterChoose;

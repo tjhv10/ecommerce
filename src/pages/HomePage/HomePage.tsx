@@ -1,4 +1,4 @@
-import Items from "../../components/items/Items";
+import Items from "../../components/items/items";
 
 function HomePage() {
   return <Items />;

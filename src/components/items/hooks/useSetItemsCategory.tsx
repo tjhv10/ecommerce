@@ -1,6 +1,5 @@
-import { Dispatch, ReactElement, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import md from "../../../assets/MOCK_DATA.json";
-import styles from "../items.module.scss";
 import { CartItem } from "../../../App";
 import { subcategoryEnum, DateEnum, PriceEnum } from "./useSetFilterChoose";
 enum CategoryEnum {
@@ -14,9 +13,7 @@ function useSetItemsCategory(
   subcategory: subcategoryEnum | DateEnum | PriceEnum | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
   category: string,
-  setSubcategory: Dispatch<subcategoryEnum | DateEnum | PriceEnum | undefined>,
-  filterChooseRef: React.RefObject<HTMLSelectElement>,
-  setFilter_chooseSelect: Dispatch<ReactElement>
+  setSubcategory: Dispatch<subcategoryEnum | DateEnum | PriceEnum | undefined>
 ) {
   useEffect(() => {
     setItems([]);
@@ -53,50 +50,8 @@ function useSetItemsCategory(
       }
       switch (category) {
         case CategoryEnum["No filter"]: {
-          setFilter_chooseSelect(<></>);
           setSubcategory(
             subcategoryEnum["No filter" as keyof typeof subcategoryEnum]
-          );
-          break;
-        }
-        default: {
-          setFilter_chooseSelect(
-            <select
-              ref={filterChooseRef}
-              className={styles.filtersBarItem}
-              name="filter choose"
-              value={
-                filterChooseRef.current != null
-                  ? filterChooseRef.current.value
-                  : ""
-              }
-              onChange={() => {
-                switch (category) {
-                  case CategoryEnum.Category:
-                    setSubcategory(
-                      subcategoryEnum[
-                        filterChooseRef.current
-                          ?.value as keyof typeof subcategoryEnum
-                      ]
-                    );
-                    break;
-                  case CategoryEnum.Price:
-                    setSubcategory(
-                      PriceEnum[
-                        filterChooseRef.current?.value as keyof typeof PriceEnum
-                      ]
-                    );
-                    break;
-                  case CategoryEnum["Uploaded date"]:
-                    setSubcategory(
-                      DateEnum[
-                        filterChooseRef.current?.value as keyof typeof DateEnum
-                      ]
-                    );
-                    break;
-                }
-              }}
-            />
           );
           break;
         }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, ReactElement } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./items.module.scss";
 import Item, { ItemProps } from "../Item/Item.tsx";
 import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
@@ -35,27 +35,18 @@ const Items: React.FC = () => {
     CategoryEnum["No filter"]
   );
   const [subcategory, setSubcategory] = useState<
-    subcategoryEnum | PriceEnum | DateEnum | undefined
+    subcategoryEnum | PriceEnum | DateEnum
   >();
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<string>("");
   const [search, setSearch] = useState<string>("");
-  const [filterChooseSelect, setFilterChooseSelect] = useState<ReactElement>();
   const filterChooseRef = useRef<HTMLSelectElement>(null);
 
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
 
-  useSetItemsCategory(
-    addItem,
-    subcategory,
-    setItems,
-    category,
-    setSubcategory,
-    filterChooseRef,
-    setFilterChooseSelect
-  );
+  useSetItemsCategory(addItem, subcategory, setItems, category, setSubcategory);
   useSort(Items, sort, setItems);
   useSetFilterChoose(category, filterChooseRef, setSubcategory, subcategory);
 
@@ -76,7 +67,46 @@ const Items: React.FC = () => {
             </option>
           ))}
         </select>
-        {filterChooseSelect}
+        {category !== "No filter" ? (
+          <select
+            ref={filterChooseRef}
+            className={styles.filtersBarItem}
+            name="filter choose"
+            value={
+              filterChooseRef.current != null
+                ? filterChooseRef.current.value
+                : ""
+            }
+            onChange={() => {
+              switch (category) {
+                case CategoryEnum.Category:
+                  setSubcategory(
+                    subcategoryEnum[
+                      filterChooseRef.current
+                        ?.value as keyof typeof subcategoryEnum
+                    ]
+                  );
+                  break;
+                case CategoryEnum.Price:
+                  setSubcategory(
+                    PriceEnum[
+                      filterChooseRef.current?.value as keyof typeof PriceEnum
+                    ]
+                  );
+                  break;
+                case CategoryEnum["Uploaded date"]:
+                  setSubcategory(
+                    DateEnum[
+                      filterChooseRef.current?.value as keyof typeof DateEnum
+                    ]
+                  );
+                  break;
+              }
+            }}
+          />
+        ) : (
+          <></>
+        )}
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {

@@ -10,7 +10,38 @@ const removeItemFromCart = (
 ) => {
   setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
 };
+const addItemToShoppingCart = (
+  shoppingCart: CartItem[],
+  newItem: CartItem
+): CartItem[] => {
+  const sameItem = shoppingCart.find(
+    ({ product }) => product.id === newItem.product.id
+  );
 
+  if (!sameItem) {
+    return [...shoppingCart, { ...newItem, quantity: 1 }];
+  }
+
+  return shoppingCart.map((item) =>
+    item.product.id === newItem.product.id
+      ? { ...item, quantity: item.quantity + 1 }
+      : item
+  );
+};
+const removeItemToShoppingCart = (
+  shoppingCart: CartItem[],
+  newItem: CartItem
+): CartItem[] => {
+  if (newItem.quantity === 1)
+    return shoppingCart.filter(
+      (items) => items.product.id !== newItem.product.id
+    );
+  return shoppingCart.map((item) =>
+    item.product.id === newItem.product.id
+      ? { ...item, quantity: item.quantity - 1 }
+      : item
+  );
+};
 function Cart() {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
   let sum = 0;
@@ -51,19 +82,9 @@ function Cart() {
                     (element) => element.product.id === item.product.id
                   );
                   if (element) {
-                    setShoppingCart((prevState) => {
-                      {
-                        return prevState.map((ListItem) => {
-                          const newItem = ListItem;
-                          if (item.product.id === ListItem.product.id) {
-                            newItem.quantity--;
-                          }
-                          return item.product.id === ListItem.product.id
-                            ? item
-                            : newItem;
-                        });
-                      }
-                    });
+                    setShoppingCart(
+                      removeItemToShoppingCart(shoppingCart, item)
+                    );
 
                     if (element.quantity === 0) {
                       removeItemFromCart(
@@ -83,19 +104,7 @@ function Cart() {
               <button
                 className={styles.removeB}
                 onClick={() => {
-                  setShoppingCart((prevState) => {
-                    {
-                      return prevState.map((ListItem) => {
-                        const newItem = ListItem;
-                        if (item.product.id === ListItem.product.id) {
-                          newItem.quantity++;
-                        }
-                        return item.product.id === ListItem.product.id
-                          ? item
-                          : newItem;
-                      });
-                    }
-                  });
+                  setShoppingCart(addItemToShoppingCart(shoppingCart, item));
                   setPrice(price + item.product.price);
                 }}
               >

@@ -1,44 +1,22 @@
 import styles from "./prodact.module.scss";
 import md from "../../assets/MOCK_DATA.json";
 import { useContext, useState } from "react";
-import { CartContext } from "../../Store/shopping-cart-context";
 import { CartItem } from "../../App";
+import { CartContext } from "../../Store/shopping-cart-context";
 
 function Prodact() {
-  const { setShoppingCart, shoppingCart } = useContext(CartContext);
+  const { shoppingCart, setShoppingCart } = useContext(CartContext);
+  const id = parseInt(window.location.href.split("/").slice(-1)[0]);
+  const item: CartItem = {
+    product: md[id],
+    quantity: 1,
+  };
   const buttonsVar = (
     <div>
       <button
         className={styles.removeB}
         onClick={() => {
-          const newItem = {
-            product: itemprop.product,
-            quantity: 1,
-          };
-          setShoppingCart((prevState) => {
-            const sameItem = prevState.find(({ product }) => product.id === id);
-            console.log(sameItem);
-
-            if (!sameItem) {
-              newItem.quantity = 1;
-              return [...prevState, newItem];
-            } else {
-              return prevState.map((item) => {
-                const newNewItem = item;
-                if (item.product.id === id) {
-                  if (newNewItem.quantity === 1) {
-                    const newlist = shoppingCart.filter(
-                      (item) => item.product.id !== id
-                    );
-                    setShoppingCart(newlist);
-                    setButtons(<></>);
-                  }
-                  --newNewItem.quantity;
-                }
-                return item.product.id === id ? newNewItem : item;
-              });
-            }
-          });
+          setShoppingCart(removeItemToShoppingCart(shoppingCart, item));
         }}
       >
         -
@@ -46,53 +24,64 @@ function Prodact() {
       <button
         className={styles.removeB}
         onClick={() => {
-          addItemPropToShoppingCart({
-            product: itemprop.product,
-            quantity: 1,
-          });
+          setShoppingCart(addItemToShoppingCart(shoppingCart, item));
         }}
       >
         +
       </button>
     </div>
   );
-  const id = parseInt(window.location.href.split("/").slice(-1)[0]);
-  const itemprop: CartItem = {
-    product: md[id],
-    quantity: 1,
-  };
+
   const [buttons, setButtons] = useState(
     shoppingCart.find((element) => element.product.id === id) === undefined ||
       shoppingCart.find((element) => element.product.id === id)?.quantity ===
         0 ? (
-      <div></div>
+      <></>
     ) : (
       buttonsVar
     )
   );
 
-  const addItemPropToShoppingCart = (newItem: CartItem) => {
-    setShoppingCart((prevState) => {
-      const sameItem = prevState.find(({ product }) => product.id === id);
+  const addItemToShoppingCart = (
+    shoppingCart: CartItem[],
+    newItem: CartItem
+  ): CartItem[] => {
+    const sameItem = shoppingCart.find(
+      ({ product }) => product.id === newItem.product.id
+    );
+    console.log(shoppingCart, newItem, sameItem);
 
-      if (!sameItem) {
-        newItem.quantity = 1;
-        return [...prevState, newItem];
-      } else {
-        return prevState.map((item) => {
-          const newNewItem = item;
-          if (item.product.id === id) {
-            newNewItem.quantity++;
-          }
-          return item.product.id === id ? newNewItem : item;
-        });
-      }
-    });
+    if (!sameItem) {
+      console.log("how");
+
+      return [...shoppingCart, newItem];
+    }
+    console.log(shoppingCart);
+
+    return shoppingCart.map((item) =>
+      item.product.id === newItem.product.id
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    );
+  };
+  const removeItemToShoppingCart = (
+    shoppingCart: CartItem[],
+    newItem: CartItem
+  ): CartItem[] => {
+    if (newItem.quantity === 1)
+      return shoppingCart.filter(
+        (items) => items.product.id !== newItem.product.id
+      );
+    return shoppingCart.map((item) =>
+      item.product.id === newItem.product.id
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    );
   };
 
   return (
     <div className={styles.grid}>
-      <div className={styles.itemprop}>
+      <div className={styles.item}>
         <div className={styles.hl}>{md[id].manufacturer + md[id].model}</div>
         <div className={styles.cat}>{md[id].category}</div>
         <div className={styles.des}>Description: {md[id].description}</div>
@@ -113,11 +102,8 @@ function Prodact() {
         <button
           className={styles.buyB}
           onClick={() => {
-            addItemPropToShoppingCart({
-              product: itemprop.product,
-              quantity: 1,
-            });
             setButtons(buttonsVar);
+            setShoppingCart(addItemToShoppingCart(shoppingCart, item));
           }}
         >
           Add to cart

@@ -18,25 +18,24 @@ export interface ItemProps {
 }
 
 const Item = ({ props }: { props: CartItem }): JSX.Element => {
-  const { setShoppingCart } = useContext(CartContext);
-  const addItemToShoppingCart = (newItem: CartItem) => {
-    setShoppingCart((prevState) => {
-      const sameItem = prevState.find(
-        ({ product }) => product.id === newItem.product.id
-      );
-      if (!sameItem) {
-        newItem.quantity = 1;
-        return [...prevState, newItem];
-      }
+  const { shoppingCart, setShoppingCart } = useContext(CartContext);
+  const addItemToShoppingCart = (
+    shoppingCart: CartItem[],
+    newItem: CartItem
+  ): CartItem[] => {
+    const sameItem = shoppingCart.find(
+      ({ product }) => product.id === newItem.product.id
+    );
 
-      return prevState.map((item) => {
-        const newItem = item;
-        if (item.product.id === newItem.product.id) {
-          newItem.quantity++;
-        }
-        return item.product.id === newItem.product.id ? newItem : item;
-      });
-    });
+    if (!sameItem) {
+      return [...shoppingCart, { ...newItem, quantity: 1 }];
+    }
+
+    return shoppingCart.map((item) =>
+      item.product.id === newItem.product.id
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    );
   };
 
   return (
@@ -63,7 +62,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <button
         className={styles.buyB}
         onClick={() => {
-          addItemToShoppingCart(props);
+          setShoppingCart(addItemToShoppingCart(shoppingCart, props));
         }}
       >
         Add to cart

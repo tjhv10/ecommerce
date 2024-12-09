@@ -1,12 +1,13 @@
 ul {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   list-style-type: none;
   margin-top: 0px;
   padding: 10px;
   overflow: hidden;
-  background-color: #333333;
+  background-color: #5f5f5f;
+  width: 97dvi;
 }
 li {
   padding: 1px;

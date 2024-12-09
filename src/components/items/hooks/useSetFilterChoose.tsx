@@ -24,7 +24,6 @@ function useSetFilterChoose(
 ) {
   useEffect(() => {
     if (filterChooseRef.current) {
-      // TODO: remove this, this is react not js
       filterChooseRef.current.innerHTML = "No filter";
     }
     const mySet = new Set<string>();

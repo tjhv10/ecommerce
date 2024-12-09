@@ -1,4 +1,5 @@
-import { Dispatch, RefObject, useEffect } from "react";
+import { Dispatch, useEffect, useState } from "react";
+
 export enum subcategoryEnum {
   "Accessories" = "Accessories",
   "Phones" = "Phones",
@@ -19,49 +20,34 @@ export enum DateEnum {
   "1/1/2021" = "1/1/2021",
   "1/1/2022" = "1/1/2022",
 }
+
 function useSetFilterChoose(
   category: string,
-  filterChooseRef: RefObject<HTMLSelectElement>,
   setSubcategory: Dispatch<
     React.SetStateAction<DateEnum | PriceEnum | subcategoryEnum | undefined>
-  >,
-  subcategory: string | undefined
+  >
 ) {
-  useEffect(() => {
-    if (filterChooseRef.current) {
-      filterChooseRef.current.innerHTML = "No filter";
-    }
-    const mySet = new Set<string>();
-    switch (category) {
-      case "Price":
-        for (const price in PriceEnum) {
-          mySet.add(price);
-        }
-        break;
-      case "Category":
-        for (const cat in subcategoryEnum) {
-          mySet.add(cat);
-        }
-        break;
-      case "Uploaded date":
-        for (const date in DateEnum) {
-          mySet.add(date);
-        }
-        break;
-    }
-    mySet.forEach(function (value) {
-      if (filterChooseRef.current) {
-        filterChooseRef.current.innerHTML +=
-          '<option value="' + value + '">' + value + "</option>";
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subcategory]);
+  const [options, setOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (filterChooseRef.current) {
-      filterChooseRef.current.innerHTML = "";
+    let mySet = new Set<string>();
+    switch (category) {
+      case "Price":
+        mySet = new Set(Object.values(PriceEnum));
+        break;
+      case "Category":
+        mySet = new Set(Object.values(subcategoryEnum));
+        break;
+      case "Uploaded date":
+        mySet = new Set(Object.values(DateEnum));
+        break;
+      default:
+        break;
     }
+    setOptions(Array.from(mySet));
+  }, [category]);
+
+  useEffect(() => {
     switch (category) {
       case "Category":
         setSubcategory(subcategoryEnum.Accessories);
@@ -73,8 +59,12 @@ function useSetFilterChoose(
         setSubcategory(DateEnum["1/1/2015"]);
         break;
       default:
+        setSubcategory(undefined);
         break;
     }
-  }, [category, filterChooseRef, setSubcategory]);
+  }, [category, setSubcategory]);
+
+  return options;
 }
+
 export default useSetFilterChoose;

@@ -40,7 +40,6 @@ const Items: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [filterChooseSelect, setFilterChooseSelect] = useState<ReactElement>();
   const filterChooseRef = useRef<HTMLSelectElement>(null);
-  const sortRef = useRef<HTMLSelectElement>(null);
 
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
@@ -77,10 +76,9 @@ const Items: React.FC = () => {
         </select>
         {filterChooseSelect}
         <select
-          ref={sortRef}
           className={styles.filtersBarItem}
-          onChange={() => {
-            if (sortRef.current) setSort(sortRef.current.value);
+          onChange={(e) => {
+            setSort(e.currentTarget.value);
           }}
         >
           <option value="id">Sort...</option>
@@ -96,7 +94,7 @@ const Items: React.FC = () => {
               if (search === "" || search.length === 1) {
                 setItems(alli);
               } else {
-                searchFunction(search, setItems, Items, setSort, sortRef);
+                searchFunction(search, setItems, Items, setSort);
               }
             }}
           ></input>

@@ -1,29 +1,26 @@
 import React, { useState, useRef, ReactElement } from "react";
 import styles from "./items.module.scss";
-import Item, { ItemProps } from "../item/item.tsx";
+import Item, { ItemProps } from "../Item/Item.tsx";
 import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
-import useSetFilterChoose from "./hooks/useSetFilterChoose";
+import useSetFilterChoose, {
+  subcategoryEnum,
+} from "./hooks/useSetFilterChoose.tsx";
 import useSort from "./hooks/useSort.tsx";
-import search from "./functions/search.tsx";
 import md from "../../assets/MOCK_DATA.json";
+import searchFunction from "./functions/searchFunction.tsx";
 
-interface CartItem {
+export interface CartItem {
   product: ItemProps;
   quantity: number;
 }
-
-export enum CategoryEnum {
+enum CategoryEnum {
   "No filter" = "No filter",
   "Category" = "Category",
-  "Price" = "Price",
   "Uploaded date" = "Uploaded date",
+  "Price" = "Price",
 }
 
 const Items: React.FC = () => {
-  const [category, setCategory] = useState<string>("");
-  const [subcategory, setSubcategory] = useState<CategoryEnum>(
-    CategoryEnum["No filter"]
-  );
   const alli: CartItem[] = [];
   for (let i = 0; i < md.length; i++) {
     const item = {
@@ -32,14 +29,19 @@ const Items: React.FC = () => {
     };
     alli.push(item);
   }
+  const [category, setCategory] = useState<CategoryEnum>(
+    CategoryEnum["No filter"]
+  );
+  const [subcategory, setSubcategory] = useState<subcategoryEnum>(
+    subcategoryEnum.Accessories
+  );
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   // TODO: change this to boolean instead
   const [filterChooseSelect, setFilterChooseSelect] = useState<ReactElement>();
   const filterChooseRef = useRef<HTMLSelectElement>(null);
   const sortRef = useRef<HTMLSelectElement>(null);
-  const filterRef = useRef<HTMLSelectElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
 
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
@@ -62,10 +64,11 @@ const Items: React.FC = () => {
       <div className={styles.filtersBar}>
         <select
           className={styles.filtersBarItem}
-          ref={filterRef}
-          onChange={() => {
-            if (filterRef.current) setCategory(filterRef.current.value);
-          }}
+          onChange={(e) =>
+            setCategory(
+              CategoryEnum[e.target.value as keyof typeof CategoryEnum]
+            )
+          }
         >
           {Object.values(CategoryEnum).map((filter) => (
             <option value={filter}>{filter}</option>
@@ -85,39 +88,25 @@ const Items: React.FC = () => {
         </select>
         <div className={styles.filtersBarItem}>
           <input
-            ref={searchRef}
             type="text"
             placeholder="Search..."
-            onChange={() => {
-              if (searchRef.current && searchRef.current.value === "") {
+            onChange={(e) => {
+              setSearch(e.target.value);
+              if (search === "" || search.length === 1) {
                 setItems(alli);
               } else {
-                if (searchRef.current)
-                  search(
-                    searchRef.current.value,
-                    setItems,
-                    Items,
-                    setSort,
-                    sortRef
-                  );
+                searchFunction(search, setItems, Items, setSort, sortRef);
               }
             }}
           ></input>
-          <button
+          {/* <button
             onClick={() => {
-              setItems(alli.slice());
-              if (searchRef.current)
-                search(
-                  searchRef.current.value,
-                  setItems,
-                  Items,
-                  setSort,
-                  sortRef
-                );
+              setItems(alli);
+              searchFunction(search, setItems, Items, setSort, sortRef);
             }}
           >
             search
-          </button>
+          </button> */}
         </div>
       </div>
       <div className={styles.content}>

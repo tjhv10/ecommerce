@@ -1,7 +1,7 @@
 import { SetStateAction, RefObject, Dispatch } from "react";
 import { CartItem } from "../../../App";
 
-const search = (
+const searchFunction = (
   phrase: string,
   setItems: Dispatch<React.SetStateAction<CartItem[]>>,
   Items: CartItem[],
@@ -18,4 +18,4 @@ const search = (
   setSort("id");
   if (sortRef.current) sortRef.current.selectedIndex = 0;
 };
-export default search;
+export default searchFunction;

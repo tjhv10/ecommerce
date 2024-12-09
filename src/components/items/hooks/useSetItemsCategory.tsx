@@ -9,14 +9,14 @@ import md from "../../../assets/MOCK_DATA.json";
 import styles from "../items.module.scss";
 import { JSX } from "react/jsx-runtime";
 import { CartItem } from "../../../App";
-import { CategoryEnum } from "../items";
+import { subcategoryEnum } from "./useSetFilterChoose";
 
 function useSetItemsCategory(
   addItem: (item: CartItem) => void,
-  subcategory: string,
+  subcategory: string | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
   category: string,
-  setSubcategory: Dispatch<CategoryEnum>,
+  setSubcategory: Dispatch<subcategoryEnum>,
   filterChooseRef: React.RefObject<HTMLSelectElement>,
   setFilter_chooseSelect: {
     (
@@ -37,7 +37,7 @@ function useSetItemsCategory(
       };
       switch (category) {
         // TODO: add enum
-        case "": {
+        case "No filter": {
           addItem(item);
           break;
         }
@@ -48,25 +48,28 @@ function useSetItemsCategory(
           break;
         }
         case "Price": {
-          // TODO: rename these variables
-          const [a, b] = subcategory.split("-");
+          const [lowPrice, highPrice] = subcategory!.split("-");
           if (
-            item.product.price >= parseInt(a) &&
-            item.product.price <= parseInt(b)
+            item.product.price >= parseInt(lowPrice) &&
+            item.product.price <= parseInt(highPrice)
           )
             addItem(item);
           break;
         }
         case "Uploaded date": {
-          if (Date.parse(item.product.uploadedDate) >= Date.parse(subcategory))
+          if (Date.parse(item.product.uploadedDate) >= Date.parse(subcategory!))
             addItem(item);
           break;
         }
       }
       switch (category) {
-        case "": {
+        case "No filter": {
           setFilter_chooseSelect(<></>);
-          setSubcategory(filterChooseRef.current.value);
+          setSubcategory(
+            subcategoryEnum[
+              filterChooseRef.current?.value as keyof typeof subcategoryEnum
+            ]
+          );
           break;
         }
         default: {
@@ -81,9 +84,19 @@ function useSetItemsCategory(
                   : ""
               }
               onChange={() => {
-                if (filterChooseRef.current) {
-                  setSubcategory(filterChooseRef.current.value);
-                }
+                console.log(
+                  subcategoryEnum[
+                    filterChooseRef.current
+                      ?.value as keyof typeof subcategoryEnum
+                  ]
+                );
+
+                setSubcategory(
+                  subcategoryEnum[
+                    filterChooseRef.current
+                      ?.value as keyof typeof subcategoryEnum
+                  ]
+                );
               }}
             />
           );

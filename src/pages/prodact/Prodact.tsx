@@ -1,6 +1,6 @@
 import styles from "./prodact.module.scss";
 import md from "../../assets/MOCK_DATA.json";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { CartItem } from "../../App";
 import { CartContext } from "../../Store/shopping-cart-context";
 
@@ -9,38 +9,10 @@ function Prodact() {
   const id = parseInt(window.location.href.split("/").slice(-1)[0]);
   const item: CartItem = {
     product: md[id],
-    quantity: 1,
+    quantity: shoppingCart.find((element) => element.product.id === id)
+      ? shoppingCart.find((element) => element.product.id === id)!.quantity
+      : 1,
   };
-  const buttonsVar = (
-    <div>
-      <button
-        className={styles.removeB}
-        onClick={() => {
-          setShoppingCart(removeItemToShoppingCart(shoppingCart, item));
-        }}
-      >
-        -
-      </button>
-      <button
-        className={styles.removeB}
-        onClick={() => {
-          setShoppingCart(addItemToShoppingCart(shoppingCart, item));
-        }}
-      >
-        +
-      </button>
-    </div>
-  );
-
-  const [buttons, setButtons] = useState(
-    shoppingCart.find((element) => element.product.id === id) === undefined ||
-      shoppingCart.find((element) => element.product.id === id)?.quantity ===
-        0 ? (
-      <></>
-    ) : (
-      buttonsVar
-    )
-  );
 
   const addItemToShoppingCart = (
     shoppingCart: CartItem[],
@@ -49,15 +21,9 @@ function Prodact() {
     const sameItem = shoppingCart.find(
       ({ product }) => product.id === newItem.product.id
     );
-    console.log(shoppingCart, newItem, sameItem);
-
     if (!sameItem) {
-      console.log("how");
-
       return [...shoppingCart, newItem];
     }
-    console.log(shoppingCart);
-
     return shoppingCart.map((item) =>
       item.product.id === newItem.product.id
         ? { ...item, quantity: item.quantity + 1 }
@@ -102,13 +68,29 @@ function Prodact() {
         <button
           className={styles.buyB}
           onClick={() => {
-            setButtons(buttonsVar);
             setShoppingCart(addItemToShoppingCart(shoppingCart, item));
           }}
         >
           Add to cart
         </button>
-        {buttons}
+        <div>
+          <button
+            className={styles.removeB}
+            onClick={() => {
+              setShoppingCart(removeItemToShoppingCart(shoppingCart, item));
+            }}
+          >
+            -
+          </button>
+          <button
+            className={styles.removeB}
+            onClick={() => {
+              setShoppingCart(addItemToShoppingCart(shoppingCart, item));
+            }}
+          >
+            +
+          </button>
+        </div>
       </div>
     </div>
   );

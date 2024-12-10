@@ -7,7 +7,7 @@ import useSetFilterChoose, {
   PriceEnum,
   DateEnum,
 } from "./hooks/useSetFilterChoose.tsx";
-import useSort from "./hooks/useSort.tsx";
+import useSort, { SortEnum } from "./hooks/useSort.tsx";
 import md from "../../assets/MOCK_DATA.json";
 import searchFunction from "./functions/searchFunction.tsx";
 
@@ -39,7 +39,7 @@ const Items: React.FC = () => {
     subcategoryEnum | PriceEnum | DateEnum
   >();
   const [Items, setItems] = useState<CartItem[]>([]);
-  const [sort, setSort] = useState<string>("");
+  const [sort, setSort] = useState<SortEnum>(SortEnum.id);
   const [search, setSearch] = useState<string>("");
   const options = useSetFilterChoose(category, setSubcategory);
 
@@ -48,7 +48,7 @@ const Items: React.FC = () => {
   };
 
   useSetItemsCategory(addItem, subcategory, setItems, category, setSubcategory);
-  useSort(Items, sort, setItems);
+  useSort(sort, setItems);
 
   return (
     <div className={styles.page}>
@@ -93,7 +93,7 @@ const Items: React.FC = () => {
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {
-            setSort(e.currentTarget.value);
+            setSort(SortEnum[e.currentTarget.value as SortEnum]);
           }}
         >
           <option value="id">Sort...</option>

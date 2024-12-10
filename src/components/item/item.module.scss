@@ -1,26 +1,26 @@
 .item {
   border: solid grey 2px;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   padding: 20px;
   width: 300px;
   height: 540px;
   overflow-y: scroll;
   scrollbar-width: none;
   margin: 10px;
-}
-.hl {
-  font-size: xx-large;
-  font-weight: bolder;
   color: aliceblue;
+
+  .hl {
+    font-size: xx-large;
+    font-weight: bolder;
+  }
+
+  .cat {
+    font-size: large;
+    font-weight: bolder;
+    color: aliceblue;
+  }
 }
-.cat {
-  font-size: large;
-  font-weight: bolder;
-  color: aliceblue;
-}
-.des {
-  color: aliceblue;
-}
+
 .sellerName {
   color: aliceblue;
 }

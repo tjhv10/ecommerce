@@ -4,16 +4,11 @@ import "./App.css";
 import RootLayout from "./pages/RootLayout/RootLayout";
 import HomePage from "./pages/HomePage/HomePage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
-import Prodact from "./pages/Prodact/Prodact";
+import Prodact from "./pages/ItemPage/ItemPage";
 import { useState } from "react";
-import { CartContext } from "./Store/shopping-cart-context";
-import { ItemProps } from "./components/Item/Item";
+import { CartContext, CartItem } from "./Store/shopping-cart-context";
 import Cart from "./pages/Cart/Cart";
 
-export interface CartItem {
-  product: ItemProps;
-  quantity: number;
-}
 const router = createBrowserRouter([
   {
     path: "/",

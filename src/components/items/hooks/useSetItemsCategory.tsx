@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 import md from "../../../assets/MOCK_DATA.json";
-import { CartItem } from "../../../App";
+import { ButtonsEnum, CartItem } from "../../../Store/shopping-cart-context";
 import { subcategoryEnum, DateEnum, PriceEnum } from "./useSetFilterChoose";
 enum CategoryEnum {
   "No filter" = "No filter",
@@ -21,6 +21,13 @@ function useSetItemsCategory(
       const item: CartItem = {
         product: md[i],
         quantity: 1,
+        buttons: new Map<ButtonsEnum, boolean>([
+          [ButtonsEnum.AddToCart, false],
+          [ButtonsEnum.Plus, true],
+          [ButtonsEnum.Minus, true],
+          [ButtonsEnum.Remove, true],
+          [ButtonsEnum.GoToItem, true],
+        ]),
       };
       switch (category) {
         case CategoryEnum["No filter"]: {

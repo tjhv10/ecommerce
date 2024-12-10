@@ -1,6 +1,13 @@
 import { Dispatch } from "react";
-import { CartItem } from "../../../App";
+import { CartItem } from "../../../Store/shopping-cart-context";
 import { SortEnum } from "../hooks/useSort";
+export const removeItemFromCart = (
+  ItemId: number,
+  shoppingCart: CartItem[],
+  setShoppingCart: Dispatch<React.SetStateAction<CartItem[]>>
+) => {
+  setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
+};
 
 const searchFunction = (
   phrase: string,

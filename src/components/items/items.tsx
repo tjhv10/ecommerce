@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./items.module.scss";
-import Item, { ItemProps } from "../Item/Item.tsx";
+import Item from "../Item/Item.tsx";
 import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
 import useSetFilterChoose, {
   subcategoryEnum,
@@ -11,10 +11,7 @@ import useSort, { SortEnum } from "./hooks/useSort.tsx";
 import md from "../../assets/MOCK_DATA.json";
 import searchFunction from "./functions/searchFunction.tsx";
 
-export interface CartItem {
-  product: ItemProps;
-  quantity: number;
-}
+import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
 enum CategoryEnum {
   "No filter" = "No filter",
   "Category" = "Category",
@@ -28,6 +25,13 @@ const Items: React.FC = () => {
     const item = {
       product: md[i],
       quantity: 1,
+      buttons: new Map<ButtonsEnum, boolean>([
+        [ButtonsEnum.AddToCart, false],
+        [ButtonsEnum.Plus, true],
+        [ButtonsEnum.Minus, true],
+        [ButtonsEnum.Remove, true],
+        [ButtonsEnum.GoToItem, true],
+      ]),
     };
     alli.push(item);
   }

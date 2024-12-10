@@ -1,26 +1,22 @@
-import { Dispatch, useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../Store/shopping-cart-context";
 import styles from "./Cart.module.scss";
-import { CartItem } from "../../App";
 import { addItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
 import { removeItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
-
-const removeItemFromCart = (
-  ItemId: number,
-  shoppingCart: CartItem[],
-  setShoppingCart: Dispatch<React.SetStateAction<CartItem[]>>
-) => {
-  setShoppingCart(shoppingCart.filter((item) => item.product.id !== ItemId));
-};
+import { removeItemFromCart } from "../../components/items/functions/searchFunction";
 
 function Cart() {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
-  let sum = 0;
-  shoppingCart.forEach((item) => {
-    sum += item.quantity * item.product.price;
-  });
 
-  const [price, setPrice] = useState(sum);
+  useEffect(() => {
+    let sum = 0;
+    shoppingCart.forEach((item) => {
+      sum += item.quantity * item.product.price;
+    });
+    setPrice(sum);
+  }, [shoppingCart]);
+
+  const [price, setPrice] = useState(0);
   return (
     <>
       <div>Total price: {price}$</div>
@@ -56,11 +52,9 @@ function Cart() {
                         shoppingCart,
                         setShoppingCart
                       );
-                      setPrice(price - item.product.price);
                       return;
                     }
                   }
-                  setPrice(price - item.product.price);
                 }}
               >
                 -
@@ -69,7 +63,6 @@ function Cart() {
                 className={styles.removeB}
                 onClick={() => {
                   setShoppingCart(addItemToShoppingCart(shoppingCart, item));
-                  setPrice(price + item.product.price);
                 }}
               >
                 +

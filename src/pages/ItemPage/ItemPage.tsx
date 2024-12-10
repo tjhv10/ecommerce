@@ -1,8 +1,11 @@
-import styles from "./prodact.module.scss";
+import styles from "./ItemPage.module.scss";
 import md from "../../assets/MOCK_DATA.json";
 import { useContext } from "react";
-import { CartItem } from "../../App";
-import { CartContext } from "../../Store/shopping-cart-context";
+import {
+  ButtonsEnum,
+  CartContext,
+  CartItem,
+} from "../../Store/shopping-cart-context";
 import { addItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
 import { removeItemToShoppingCart } from "../../components/Item/addAndRemoveItems";
 
@@ -14,6 +17,13 @@ function Prodact() {
     quantity: shoppingCart.find((element) => element.product.id === id)
       ? shoppingCart.find((element) => element.product.id === id)!.quantity
       : 1,
+    buttons: new Map<ButtonsEnum, boolean>([
+      [ButtonsEnum.AddToCart, false],
+      [ButtonsEnum.Plus, true],
+      [ButtonsEnum.Minus, true],
+      [ButtonsEnum.Remove, true],
+      [ButtonsEnum.GoToItem, true],
+    ]),
   };
 
   return (

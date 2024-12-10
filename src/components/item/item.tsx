@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import styles from "./item.module.scss";
 import { useContext } from "react";
-import { CartContext } from "../../Store/shopping-cart-context";
-import { CartItem } from "../../App";
-import { addItemToShoppingCart } from "./addAndRemoveItems";
+import {
+  ButtonsEnum,
+  CartContext,
+  CartItem,
+} from "../../Store/shopping-cart-context";
+import {
+  addItemToShoppingCart,
+  removeItemToShoppingCart,
+} from "./addAndRemoveItems";
+import { removeItemFromCart } from "../items/functions/searchFunction";
 
 export interface ItemProps {
   id: number;
@@ -20,6 +27,7 @@ export interface ItemProps {
 
 const Item = ({ props }: { props: CartItem }): JSX.Element => {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
+  console.log(props.buttons);
 
   return (
     <div className={styles.item}>
@@ -42,17 +50,65 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.uploadedDate}>
         Uploaded date: {props.product.uploadedDate}
       </div>
-      <button
-        className={styles.buyB}
-        onClick={() => {
-          setShoppingCart(addItemToShoppingCart(shoppingCart, props));
-        }}
-      >
-        Add to cart
-      </button>
-      <Link to={{ pathname: "/prodact/" + props.product.id }}>
-        <button className={styles.itemB}>Go to prodact</button>
-      </Link>
+      {props.buttons.get(ButtonsEnum.Minus) && (
+        <button
+          className={styles.buyB}
+          onClick={() => {
+            setShoppingCart(addItemToShoppingCart(shoppingCart, props));
+          }}
+        >
+          Add to cart
+        </button>
+      )}
+      {props.buttons.get(ButtonsEnum.Minus) && (
+        <button
+          className={styles.removeB}
+          onClick={() => {
+            const element = shoppingCart.find(
+              (element) => element.product.id === props.product.id
+            );
+            if (element) {
+              setShoppingCart(removeItemToShoppingCart(shoppingCart, props));
+
+              if (element.quantity === 0) {
+                removeItemFromCart(
+                  props.product.id,
+                  shoppingCart,
+                  setShoppingCart
+                );
+                return;
+              }
+            }
+          }}
+        >
+          -
+        </button>
+      )}
+      {props.buttons.get(ButtonsEnum.Plus) && (
+        <button
+          className={styles.removeB}
+          onClick={() => {
+            setShoppingCart(addItemToShoppingCart(shoppingCart, props));
+          }}
+        >
+          +
+        </button>
+      )}
+      {props.buttons.get(ButtonsEnum.Remove) && (
+        <button
+          className={styles.removeB}
+          onClick={() => {
+            removeItemFromCart(props.product.id, shoppingCart, setShoppingCart);
+          }}
+        >
+          Remove Item from Cart
+        </button>
+      )}
+      {props.buttons.get(ButtonsEnum.GoToItem) && (
+        <Link to={{ pathname: "/prodact/" + props.product.id }}>
+          <button className={styles.itemB}>Go to prodact</button>
+        </Link>
+      )}
     </div>
   );
 };

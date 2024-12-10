@@ -1,4 +1,4 @@
-import { CartItem } from "../items/items";
+import { CartItem } from "../../Store/shopping-cart-context";
 
 export function addItemToShoppingCart(
   shoppingCart: CartItem[],

@@ -20,12 +20,12 @@ function useSetItemsCategory(
     for (const i in md) {
       const item: CartItem = {
         product: md[i],
-        quantity: 1,
+        quantity: 0,
         buttons: new Map<ButtonsEnum, boolean>([
-          [ButtonsEnum.AddToCart, false],
-          [ButtonsEnum.Plus, true],
-          [ButtonsEnum.Minus, true],
-          [ButtonsEnum.Remove, true],
+          [ButtonsEnum.AddToCart, true],
+          [ButtonsEnum.Plus, false],
+          [ButtonsEnum.Minus, false],
+          [ButtonsEnum.Remove, false],
           [ButtonsEnum.GoToItem, true],
         ]),
       };
@@ -35,18 +35,22 @@ function useSetItemsCategory(
           break;
         }
         case CategoryEnum["Category"]: {
+          console.log(subcategory);
+
           if (item.product.category === subcategory) {
             addItem(item);
           }
           break;
         }
         case CategoryEnum["Price"]: {
-          const [lowPrice, highPrice] = subcategory!.split("-");
-          if (
-            item.product.price >= parseInt(lowPrice) &&
-            item.product.price <= parseInt(highPrice)
-          )
-            addItem(item);
+          if (subcategory) {
+            const [lowPrice, highPrice] = subcategory!.split("-");
+            if (
+              item.product.price >= parseInt(lowPrice) &&
+              item.product.price <= parseInt(highPrice)
+            )
+              addItem(item);
+          }
           break;
         }
         case CategoryEnum["Uploaded date"]: {

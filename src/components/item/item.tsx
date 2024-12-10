@@ -8,7 +8,7 @@ import {
 } from "../../Store/shopping-cart-context";
 import {
   addItemToShoppingCart,
-  removeItemToShoppingCart,
+  removeItemQuantityFromShoppingCart,
 } from "./addAndRemoveItems";
 import { removeItemFromCart } from "../items/functions/searchFunction";
 
@@ -27,7 +27,6 @@ export interface ItemProps {
 
 const Item = ({ props }: { props: CartItem }): JSX.Element => {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
-  console.log(props.buttons);
 
   return (
     <div className={styles.item}>
@@ -50,7 +49,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.uploadedDate}>
         Uploaded date: {props.product.uploadedDate}
       </div>
-      {props.buttons.get(ButtonsEnum.Minus) && (
+      {props.buttons.get(ButtonsEnum.AddToCart) && (
         <button
           className={styles.buyB}
           onClick={() => {
@@ -68,7 +67,9 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
               (element) => element.product.id === props.product.id
             );
             if (element) {
-              setShoppingCart(removeItemToShoppingCart(shoppingCart, props));
+              setShoppingCart(
+                removeItemQuantityFromShoppingCart(shoppingCart, props)
+              );
 
               if (element.quantity === 0) {
                 removeItemFromCart(
@@ -85,14 +86,17 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
         </button>
       )}
       {props.buttons.get(ButtonsEnum.Plus) && (
-        <button
-          className={styles.removeB}
-          onClick={() => {
-            setShoppingCart(addItemToShoppingCart(shoppingCart, props));
-          }}
-        >
-          +
-        </button>
+        <>
+          <button
+            className={styles.removeB}
+            onClick={() => {
+              setShoppingCart(addItemToShoppingCart(shoppingCart, props));
+            }}
+          >
+            +
+          </button>
+          <div className={styles.quantity}>quantity: {props.quantity}</div>
+        </>
       )}
       {props.buttons.get(ButtonsEnum.Remove) && (
         <button

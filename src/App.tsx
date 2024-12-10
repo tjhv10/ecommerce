@@ -4,7 +4,7 @@ import "./App.css";
 import RootLayout from "./pages/RootLayout/RootLayout";
 import HomePage from "./pages/HomePage/HomePage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
-import Prodact from "./pages/ItemPage/ItemPage";
+import ItemPage from "./pages/ItemPage/ItemPage";
 import { useState } from "react";
 import { CartContext, CartItem } from "./Store/shopping-cart-context";
 import Cart from "./pages/Cart/Cart";
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/prodact/:id",
-        element: <Prodact />,
+        element: <ItemPage />,
       },
     ],
   },

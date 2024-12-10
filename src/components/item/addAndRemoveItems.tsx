@@ -18,14 +18,12 @@ export function addItemToShoppingCart(
       : item
   );
 }
-export const removeItemToShoppingCart = (
+export const removeItemQuantityFromShoppingCart = (
   shoppingCart: CartItem[],
   newItem: CartItem
 ): CartItem[] => {
-  if (newItem.quantity === 1)
-    return shoppingCart.filter(
-      (items) => items.product.id !== newItem.product.id
-    );
+  if (newItem.quantity === 1 || newItem.quantity === 0)
+    shoppingCart.filter((items) => items.product.id !== newItem.product.id);
   return shoppingCart.map((item) =>
     item.product.id === newItem.product.id
       ? { ...item, quantity: item.quantity - 1 }

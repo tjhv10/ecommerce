@@ -24,12 +24,12 @@ const Items: React.FC = () => {
   for (let i = 0; i < md.length; i++) {
     const item = {
       product: md[i],
-      quantity: 1,
+      quantity: 0,
       buttons: new Map<ButtonsEnum, boolean>([
-        [ButtonsEnum.AddToCart, false],
-        [ButtonsEnum.Plus, true],
-        [ButtonsEnum.Minus, true],
-        [ButtonsEnum.Remove, true],
+        [ButtonsEnum.AddToCart, true],
+        [ButtonsEnum.Plus, false],
+        [ButtonsEnum.Minus, false],
+        [ButtonsEnum.Remove, false],
         [ButtonsEnum.GoToItem, true],
       ]),
     };

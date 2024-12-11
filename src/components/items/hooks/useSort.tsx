@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { CartItem } from "../../../App";
+import { CartItem } from "../../../Store/shopping-cart-context";
 export enum SortEnum {
   "id" = "id",
   "date" = "date",

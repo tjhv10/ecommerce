@@ -1,11 +1,11 @@
 .content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   color: rgb(255, 255, 255);
   overflow-y: scroll;
   scrollbar-width: none;
-  max-height: 80dvh;
-  width: 180dvh;
+  max-height: 75dvh;
+  width: 100dvi;
 }

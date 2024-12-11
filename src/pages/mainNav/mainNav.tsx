@@ -20,8 +20,8 @@ function MainNavigation() {
               <Link to="/">
                 <img
                   src="https://i.pinimg.com/736x/16/48/41/164841e3ae4f5369f1b4299df0a17154.jpg"
-                  height="50px"
-                  width="50px"
+                  height="70px"
+                  width="70px"
                 ></img>
               </Link>
             </li>
@@ -30,8 +30,8 @@ function MainNavigation() {
                 <div>{sum}</div>
                 <img
                   src="https://banner2.cleanpng.com/20180426/jxq/avez1anz5.webp"
-                  height="50px"
-                  width="50px"
+                  height="70px"
+                  width="70px"
                 ></img>
               </Link>
             </li>

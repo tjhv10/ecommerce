@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "./items.module.scss";
 import Item from "../Item/Item.tsx";
-import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
+import useSetItemsCategory, {
+  CategoryEnum,
+} from "./hooks/useSetItemsCategory.tsx";
 import useSetFilterChoose, {
   subcategoryEnum,
   PriceEnum,
@@ -12,12 +14,6 @@ import md from "../../assets/MOCK_DATA.json";
 import searchFunction from "./functions/searchFunction.tsx";
 
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
-enum CategoryEnum {
-  "No filter" = "No filter",
-  "Category" = "Category",
-  "Uploaded date" = "Uploaded date",
-  "Price" = "Price",
-}
 
 const Items: React.FC = () => {
   const alli: CartItem[] = [];
@@ -55,6 +51,20 @@ const Items: React.FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>
+        <div className={styles.filtersBarItem}>
+          <input
+            type="text"
+            placeholder="Search..."
+            onChange={(e) => {
+              setSearch(e.target.value);
+              if (search === "" || search.length === 1) {
+                setItems(alli);
+              } else {
+                searchFunction(search, setItems, Items, setSort);
+              }
+            }}
+          />
+        </div>
         <select
           className={styles.filtersBarItem}
           onChange={(e) =>
@@ -69,7 +79,7 @@ const Items: React.FC = () => {
             </option>
           ))}
         </select>
-        {category !== "No filter" ? (
+        {category !== CategoryEnum["No filter"] ? (
           <select
             className={styles.filtersBarItem}
             onChange={(e) =>
@@ -102,20 +112,6 @@ const Items: React.FC = () => {
           <option value="price">Sort by price</option>
           <option value="date">Sort by uploaded date</option>
         </select>
-        <div className={styles.filtersBarItem}>
-          <input
-            type="text"
-            placeholder="Search..."
-            onChange={(e) => {
-              setSearch(e.target.value);
-              if (search === "" || search.length === 1) {
-                setItems(alli);
-              } else {
-                searchFunction(search, setItems, Items, setSort);
-              }
-            }}
-          />
-        </div>
       </div>
       <div className={styles.content}>
         {Items.map((item) => (

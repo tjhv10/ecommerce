@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import md from "../../../assets/MOCK_DATA.json";
 import { ButtonsEnum, CartItem } from "../../../Store/shopping-cart-context";
 import { subcategoryEnum, DateEnum, PriceEnum } from "./useSetFilterChoose";
-enum CategoryEnum {
+export enum CategoryEnum {
   "No filter" = "No filter",
   "Category" = "Category",
   "Uploaded date" = "Uploaded date",

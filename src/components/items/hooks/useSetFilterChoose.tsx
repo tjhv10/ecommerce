@@ -1,4 +1,5 @@
 import { Dispatch, useEffect, useState } from "react";
+import { CategoryEnum } from "./useSetItemsCategory";
 
 export enum subcategoryEnum {
   "Accessories" = "Accessories",
@@ -32,38 +33,21 @@ function useSetFilterChoose(
   useEffect(() => {
     let mySet = new Set<string>();
     switch (category) {
-      case "Price":
+      case CategoryEnum.Price:
         mySet = new Set(Object.values(PriceEnum));
+        setSubcategory(PriceEnum["0-500"]);
         break;
-      case "Category":
+      case CategoryEnum.Category:
         mySet = new Set(Object.values(subcategoryEnum));
+        setSubcategory(subcategoryEnum.Accessories);
         break;
-      case "Uploaded date":
+      case CategoryEnum["Uploaded date"]:
         mySet = new Set(Object.values(DateEnum));
-        break;
-      default:
+        setSubcategory(DateEnum["1/1/2015"]);
         break;
     }
     setOptions(Array.from(mySet));
-  }, [category]);
-
-  useEffect(() => {
-    switch (category) {
-      case "Category":
-        setSubcategory(subcategoryEnum.Accessories);
-        break;
-      case "Price":
-        setSubcategory(PriceEnum["0-500"]);
-        break;
-      case "Uploaded date":
-        setSubcategory(DateEnum["1/1/2015"]);
-        break;
-      default:
-        setSubcategory(undefined);
-        break;
-    }
   }, [category, setSubcategory]);
-
   return options;
 }
 

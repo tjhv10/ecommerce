@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import MainNavigation from "../MainNav/mainNav";
+import MainNavigation from "../MainNav/MainNav";
 import styles from "./RootLayout.module.scss";
 
 function RootLayout() {

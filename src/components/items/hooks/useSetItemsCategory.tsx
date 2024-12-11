@@ -20,13 +20,11 @@ function useSetItemsCategory(
     for (const i in md) {
       const item: CartItem = {
         product: md[i],
-        quantity: 0,
+        quantity: 1,
         buttons: new Map<ButtonsEnum, boolean>([
           [ButtonsEnum.AddToCart, true],
-          [ButtonsEnum.Plus, false],
-          [ButtonsEnum.Minus, false],
+          [ButtonsEnum.PlusMinus, false],
           [ButtonsEnum.Remove, false],
-          [ButtonsEnum.GoToItem, true],
         ]),
       };
       switch (category) {

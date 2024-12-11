@@ -4,8 +4,14 @@ import Item from "../../components/Item/Item";
 import styles from "./Cart.module.scss";
 
 function Cart() {
-  const { shoppingCart } = useContext(CartContext);
-
+  const { shoppingCart, setShoppingCart } = useContext(CartContext);
+  useEffect(() => {
+    const filterdShoppingCart = shoppingCart.filter(
+      (item) => item.quantity > 0
+    );
+    setShoppingCart(filterdShoppingCart);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     let sum = 0;
     shoppingCart.forEach((item) => {
@@ -23,10 +29,8 @@ function Cart() {
           (item) => (
             (item.buttons = new Map<ButtonsEnum, boolean>([
               [ButtonsEnum.AddToCart, false],
-              [ButtonsEnum.Plus, true],
-              [ButtonsEnum.Minus, true],
+              [ButtonsEnum.PlusMinus, true],
               [ButtonsEnum.Remove, true],
-              [ButtonsEnum.GoToItem, false],
             ])),
             (<Item key={item.product.id} props={item} />)
           )

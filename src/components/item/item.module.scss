@@ -1,43 +1,38 @@
 .item {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
   border: solid grey 2px;
   border-radius: 1.25rem;
-  padding: 20px;
-  width: 300px;
-  height: 540px;
+  padding: 1.2rem;
+  width: 18.75rem;
   overflow-y: scroll;
   scrollbar-width: none;
   margin: 10px;
   color: aliceblue;
-
+  .des {
+    height: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
   .hl {
     font-size: xx-large;
     font-weight: bolder;
   }
-
   .cat {
     font-size: large;
     font-weight: bolder;
-    color: aliceblue;
   }
-}
-
-.sellerName {
-  color: aliceblue;
-}
-.price {
-  color: aliceblue;
-  font-size: larger;
-}
-.uploadedDate {
-  color: aliceblue;
-}
-.buyB {
-  margin: 10px;
-}
-.itemB {
-  margin: 10px;
-}
-.img {
-  height: 200px;
-  width: 250px;
+  .price {
+    font-size: larger;
+  }
+  .itemB {
+    margin: 0.5rem;
+  }
+  .img {
+    height: 16rem;
+    width: 18.5rem;
+  }
 }

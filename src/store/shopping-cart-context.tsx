@@ -1,7 +1,7 @@
 import React from "react";
 import { ItemProps } from "../components/Item/Item";
 export enum ButtonsEnum {
-  AddToCart,
+  AddToCartAndGoToItemPage,
   PlusMinus,
   Remove,
 }

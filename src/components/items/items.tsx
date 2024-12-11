@@ -22,7 +22,7 @@ const Items: React.FC = () => {
       product: md[i],
       quantity: 1,
       buttons: new Map<ButtonsEnum, boolean>([
-        [ButtonsEnum.AddToCart, true],
+        [ButtonsEnum.AddToCartAndGoToItemPage, true],
         [ButtonsEnum.PlusMinus, false],
         [ButtonsEnum.Remove, false],
       ]),

@@ -28,7 +28,7 @@ function Cart() {
         {shoppingCart.map(
           (item) => (
             (item.buttons = new Map<ButtonsEnum, boolean>([
-              [ButtonsEnum.AddToCart, false],
+              [ButtonsEnum.AddToCartAndGoToItemPage, false],
               [ButtonsEnum.PlusMinus, true],
               [ButtonsEnum.Remove, true],
             ])),

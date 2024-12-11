@@ -50,7 +50,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.uploadedDate}>
         Uploaded date: {props.product.uploadedDate}
       </div>
-      {props.buttons.get(ButtonsEnum.AddToCart) && (
+      {props.buttons.get(ButtonsEnum.AddToCartAndGoToItemPage) && (
         <div>
           <button
             className={styles.itemB}
@@ -61,7 +61,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
             Add to cart
           </button>
           <Link to={{ pathname: "/prodact/" + props.product.id }}>
-            <button className={styles.itemB}>Go to prodact</button>
+            <button className={styles.itemB}>Go to item page</button>
           </Link>
         </div>
       )}

@@ -17,7 +17,7 @@ function ItemPage() {
       ? shoppingCart.find((element) => element.product.id === id)!.quantity
       : 0,
     buttons: new Map<ButtonsEnum, boolean>([
-      [ButtonsEnum.AddToCart, false],
+      [ButtonsEnum.AddToCartAndGoToItemPage, false],
       [ButtonsEnum.PlusMinus, true],
       [ButtonsEnum.Remove, false],
     ]),

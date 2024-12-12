@@ -6,7 +6,6 @@ import useSetItemsCategory, {
 } from "./hooks/useSetItemsCategory.tsx";
 import useSetFilterChoose, {
   subcategoryEnum,
-  PriceEnum,
   DateEnum,
 } from "./hooks/useSetFilterChoose.tsx";
 import useSort, { SortEnum } from "./hooks/useSort.tsx";
@@ -34,12 +33,11 @@ const Items: React.FC = () => {
     CategoryEnum["No filter"]
   );
   const [subcategory, setSubcategory] = useState<
-    subcategoryEnum | PriceEnum | DateEnum
+    subcategoryEnum | number[] | DateEnum
   >();
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<SortEnum>(SortEnum.id);
-  const [search, setSearch] = useState<string>("");
-  const options = useSetFilterChoose(category, setSubcategory);
+  const options = useSetFilterChoose(category, subcategory, setSubcategory);
 
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
@@ -56,11 +54,10 @@ const Items: React.FC = () => {
             type="text"
             placeholder="Search..."
             onChange={(e) => {
-              setSearch(e.target.value);
-              if (search === "" || search.length === 1) {
+              if (e.target.value === "") {
                 setItems(alli);
               } else {
-                searchFunction(search, setItems, Items, setSort);
+                searchFunction(e.target.value, setItems, alli, setSort);
               }
             }}
           />
@@ -79,29 +76,7 @@ const Items: React.FC = () => {
             </option>
           ))}
         </select>
-        {category !== CategoryEnum["No filter"] ? (
-          <select
-            className={styles.filtersBarItem}
-            onChange={(e) =>
-              setSubcategory(
-                category === "Category"
-                  ? subcategoryEnum[
-                      e.target.value as keyof typeof subcategoryEnum
-                    ]
-                  : category === "Price"
-                  ? PriceEnum[e.target.value as keyof typeof PriceEnum]
-                  : DateEnum[e.target.value as keyof typeof DateEnum]
-              )
-            }
-            value={subcategory}
-          >
-            {options.map((option) => (
-              <option value={option} key={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        ) : null}
+        {category !== CategoryEnum["No filter"] ? options : null}
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {

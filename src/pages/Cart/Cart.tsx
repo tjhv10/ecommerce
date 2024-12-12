@@ -23,7 +23,7 @@ function Cart() {
   const [price, setPrice] = useState(0);
   return (
     <>
-      price: {price}$
+      Total price: {price}$
       <div className={styles.content}>
         {shoppingCart.map(
           (item) => (

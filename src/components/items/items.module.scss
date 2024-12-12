@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
-  align-items: center;
   color: rgb(255, 255, 255);
   overflow-y: scroll;
   scrollbar-width: none;
@@ -22,5 +21,9 @@
   justify-content: start;
 }
 .filtersBarItem {
-  margin-bottom: auto;
+  margin-bottom: 4rem;
+}
+.filtersBarItemPrice {
+  margin-bottom: 3.27rem;
+  width: 50rem;
 }

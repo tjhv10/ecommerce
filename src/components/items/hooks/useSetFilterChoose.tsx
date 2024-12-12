@@ -1,16 +1,13 @@
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, ReactElement, useEffect, useState } from "react";
 import { CategoryEnum } from "./useSetItemsCategory";
+import styles from "../Items.module.scss";
+import Slider from "@mui/material/Slider";
 
 export enum subcategoryEnum {
   "Accessories" = "Accessories",
   "Phones" = "Phones",
 }
-export enum PriceEnum {
-  "0-500" = "0-500",
-  "500-1000" = "500-1000",
-  "1000-1500" = "1000-1500",
-  "1500-2000" = "1500-2000",
-}
+
 export enum DateEnum {
   "1/1/2015" = "1/1/2015",
   "1/1/2016" = "1/1/2016",
@@ -24,30 +21,92 @@ export enum DateEnum {
 
 function useSetFilterChoose(
   category: string,
+  subcategory: subcategoryEnum | DateEnum | number[] | undefined,
   setSubcategory: Dispatch<
-    React.SetStateAction<DateEnum | PriceEnum | subcategoryEnum | undefined>
+    React.SetStateAction<DateEnum | number[] | subcategoryEnum | undefined>
   >
 ) {
-  const [options, setOptions] = useState<string[]>([]);
+  function valuetext(value: number) {
+    return `${value}$`;
+  }
+
+  const [options, setOptions] = useState<string[] | ReactElement>([]);
+
+  const handleChange = (_event: Event, newValue: number | number[]) => {
+    if (Array.isArray(newValue)) {
+      setSubcategory(newValue);
+    }
+  };
 
   useEffect(() => {
     let mySet = new Set<string>();
     switch (category) {
       case CategoryEnum.Price:
-        mySet = new Set(Object.values(PriceEnum));
-        setSubcategory(PriceEnum["0-500"]);
+        if (!Array.isArray(subcategory)) {
+          setSubcategory([0, 2000]);
+        }
+
+        setOptions(
+          <Slider
+            getAriaLabel={() => "Price range"}
+            value={Array.isArray(subcategory) ? subcategory : [0, 2000]}
+            onChange={handleChange}
+            valueLabelDisplay="auto"
+            getAriaValueText={valuetext}
+            className={styles.filtersBarItemPrice}
+            min={0}
+            max={2000}
+          />
+        );
         break;
+
       case CategoryEnum.Category:
         mySet = new Set(Object.values(subcategoryEnum));
         setSubcategory(subcategoryEnum.Accessories);
+        setOptions(
+          <select
+            className={styles.filtersBarItem}
+            onChange={(e) =>
+              setSubcategory(
+                category === CategoryEnum.Category
+                  ? subcategoryEnum[
+                      e.target.value as keyof typeof subcategoryEnum
+                    ]
+                  : DateEnum[e.target.value as keyof typeof DateEnum]
+              )
+            }
+          >
+            {Array.from(mySet).map((option) => (
+              <option value={option} key={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
         break;
+
       case CategoryEnum["Uploaded date"]:
         mySet = new Set(Object.values(DateEnum));
         setSubcategory(DateEnum["1/1/2015"]);
+        setOptions(
+          <select
+            className={styles.filtersBarItem}
+            onChange={(e) =>
+              setSubcategory(DateEnum[e.target.value as keyof typeof DateEnum])
+            }
+          >
+            {Array.from(mySet).map((option) => (
+              <option value={option} key={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
         break;
     }
-    setOptions(Array.from(mySet));
-  }, [category, setSubcategory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, subcategory, setSubcategory]);
+
   return options;
 }
 

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 import md from "../../../assets/MOCK_DATA.json";
 import { ButtonsEnum, CartItem } from "../../../Store/shopping-cart-context";
-import { subcategoryEnum, DateEnum, PriceEnum } from "./useSetFilterChoose";
+import { subcategoryEnum, DateEnum } from "./useSetFilterChoose";
 export enum CategoryEnum {
   "No filter" = "No filter",
   "Category" = "Category",
@@ -10,10 +10,10 @@ export enum CategoryEnum {
 }
 function useSetItemsCategory(
   addItem: (item: CartItem) => void,
-  subcategory: subcategoryEnum | DateEnum | PriceEnum | undefined,
+  subcategory: subcategoryEnum | DateEnum | number[] | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
   category: string,
-  setSubcategory: Dispatch<subcategoryEnum | DateEnum | PriceEnum | undefined>
+  setSubcategory: Dispatch<subcategoryEnum | DateEnum | number[] | undefined>
 ) {
   useEffect(() => {
     setItems([]);
@@ -33,26 +33,27 @@ function useSetItemsCategory(
           break;
         }
         case CategoryEnum["Category"]: {
-          console.log(subcategory);
-
           if (item.product.category === subcategory) {
             addItem(item);
           }
           break;
         }
         case CategoryEnum["Price"]: {
-          if (subcategory) {
-            const [lowPrice, highPrice] = subcategory!.split("-");
+          if (Array.isArray(subcategory) && subcategory.length === 2) {
+            const [lowPrice, highPrice] = subcategory;
             if (
-              item.product.price >= parseInt(lowPrice) &&
-              item.product.price <= parseInt(highPrice)
+              item.product.price >= lowPrice &&
+              item.product.price <= highPrice
             )
               addItem(item);
           }
           break;
         }
         case CategoryEnum["Uploaded date"]: {
-          if (Date.parse(item.product.uploadedDate) >= Date.parse(subcategory!))
+          if (
+            typeof subcategory === "string" &&
+            Date.parse(item.product.uploadedDate) >= Date.parse(subcategory!)
+          )
             addItem(item);
           break;
         }

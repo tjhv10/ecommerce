@@ -6,7 +6,7 @@ import {
   CartContext,
   CartItem,
 } from "../../Store/shopping-cart-context";
-import Item from "../../components/Item/Item";
+import Item from "../../components/Item/item";
 
 function ItemPage() {
   const { shoppingCart } = useContext(CartContext);

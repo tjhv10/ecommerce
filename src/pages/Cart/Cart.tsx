@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ButtonsEnum, CartContext } from "../../Store/shopping-cart-context";
-import Item from "../../components/Item/Item";
+import Item from "../../components/Item/item";
 import styles from "./Cart.module.scss";
 
 function Cart() {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./items.module.scss";
-import Item from "../Item/Item.tsx";
+import Item from "../Item/item.tsx";
 import useSetItemsCategory, {
   CategoryEnum,
 } from "./hooks/useSetItemsCategory.tsx";
@@ -49,20 +49,18 @@ const Items: React.FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>
-        <div className={styles.search}>
-          <input
-            type="text"
-            placeholder="Search..."
-            className={styles.searchTerm}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setItems(alli);
-              } else {
-                searchFunction(e.target.value, setItems, alli, setSort);
-              }
-            }}
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search..."
+          className={styles.search}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setItems(alli);
+            } else {
+              searchFunction(e.target.value, setItems, alli, setSort);
+            }
+          }}
+        />
         <select
           className={styles.filtersBarItem}
           onChange={(e) =>

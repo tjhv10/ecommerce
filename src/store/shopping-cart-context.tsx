@@ -1,5 +1,5 @@
 import React from "react";
-import { ItemProps } from "../components/Item/Item";
+import { ItemProps } from "../components/Item/item";
 export enum ButtonsEnum {
   AddToCartAndGoToItemPage,
   PlusMinus,

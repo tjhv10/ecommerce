@@ -5,12 +5,12 @@ import {
   ButtonsEnum,
   CartContext,
   CartItem,
-} from "../../Store/shopping-cart-context";
+} from "../../Store/shopping-cart-context.js";
 import {
   addItemToShoppingCart,
   removeItemQuantityFromShoppingCart,
-} from "./addAndRemoveItems";
-import { removeItemFromCart } from "../items/functions/searchFunction";
+} from "./addAndRemoveItems.js";
+import { removeItemFromCart } from "../items/functions/searchFunction.js";
 
 export interface ItemProps {
   id: number;

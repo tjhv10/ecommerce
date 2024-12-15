@@ -5,6 +5,8 @@ import { CartContext } from "../../Store/shopping-cart-context";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { FcMultipleSmartphones } from "react-icons/fc";
 
+const SIZE = 50;
+
 function MainNavigation() {
   const { shoppingCart } = useContext(CartContext);
 
@@ -12,7 +14,7 @@ function MainNavigation() {
     (accumulator, currentValue) => accumulator + currentValue.quantity,
     0
   );
-  const size = 50;
+
   return (
     <header>
       <div className={styles.main}>
@@ -20,14 +22,14 @@ function MainNavigation() {
           <ul>
             <li>
               <Link to="/">
-                <FcMultipleSmartphones size={size} />
+                <FcMultipleSmartphones size={SIZE} />
               </Link>
             </li>
             <li>
               <ol>
                 <li>
                   <Link to="/cart">
-                    <MdOutlineShoppingCart size={size} />
+                    <MdOutlineShoppingCart size={SIZE} />
                   </Link>
                 </li>
                 <li className={styles.quantity}>

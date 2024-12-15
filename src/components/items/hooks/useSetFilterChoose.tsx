@@ -103,9 +103,6 @@ function useSetFilterChoose(
           <select
             className={styles.filtersBarItem}
             onChange={(e) => {
-              console.log(e.target.value);
-              console.log(subcategory);
-
               setSubcategory(DateEnum[e.target.value as keyof typeof DateEnum]);
             }}
           >

@@ -4,14 +4,8 @@ import Item from "../../components/Item/item";
 import styles from "./Cart.module.scss";
 
 function Cart() {
-  const { shoppingCart, setShoppingCart } = useContext(CartContext);
-  useEffect(() => {
-    const filterdShoppingCart = shoppingCart.filter(
-      (item) => item.quantity > 0
-    );
-    setShoppingCart(filterdShoppingCart);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { shoppingCart } = useContext(CartContext);
+
   useEffect(() => {
     let sum = 0;
     shoppingCart.forEach((item) => {
@@ -21,6 +15,7 @@ function Cart() {
   }, [shoppingCart]);
 
   const [price, setPrice] = useState(0);
+
   return (
     <>
       <h1>Welcome to cart:</h1>
@@ -29,7 +24,6 @@ function Cart() {
         {shoppingCart.map(
           (item) => (
             (item.buttons = new Map<ButtonsEnum, boolean>([
-              [ButtonsEnum.AddToCartAndGoToItemPage, false],
               [ButtonsEnum.PlusMinus, true],
               [ButtonsEnum.Remove, true],
             ])),

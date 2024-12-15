@@ -5,6 +5,7 @@ export enum SortEnum {
   "date" = "date",
   "price" = "price",
 }
+
 const sorts = new Map([
   [
     SortEnum.date,

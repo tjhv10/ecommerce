@@ -7,20 +7,18 @@ import {
   CartItem,
 } from "../../Store/shopping-cart-context";
 import Item from "../../components/Item/item";
+import { useParams } from "react-router-dom";
 
 function ItemPage() {
   const { shoppingCart } = useContext(CartContext);
-  const id = parseInt(window.location.href.split("/").slice(-1)[0]);
+  const id = parseInt(useParams().id!);
+
   const item: CartItem = {
     product: md[id],
     quantity: shoppingCart.find((element) => element.product.id === id)
       ? shoppingCart.find((element) => element.product.id === id)!.quantity
       : 0,
-    buttons: new Map<ButtonsEnum, boolean>([
-      [ButtonsEnum.AddToCartAndGoToItemPage, false],
-      [ButtonsEnum.PlusMinus, true],
-      [ButtonsEnum.Remove, false],
-    ]),
+    buttons: new Map<ButtonsEnum, boolean>([[ButtonsEnum.PlusMinus, true]]),
   };
 
   return (

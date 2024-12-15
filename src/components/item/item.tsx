@@ -34,13 +34,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.cat}>{props.product.category}</div>
 
       <div>
-        {
-          <img
-            className={styles.img}
-            src={props.product.imgUrl}
-            alt="pic"
-          ></img>
-        }
+        <img className={styles.img} src={props.product.imgUrl} alt="pic" />
       </div>
       <div className={styles.des}>Description: {props.product.description}</div>
       <div className={styles.price}>Price: {props.product.price}$</div>

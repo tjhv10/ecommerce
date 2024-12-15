@@ -22,8 +22,6 @@ const Items: React.FC = () => {
       quantity: 1,
       buttons: new Map<ButtonsEnum, boolean>([
         [ButtonsEnum.AddToCartAndGoToItemPage, true],
-        [ButtonsEnum.PlusMinus, false],
-        [ButtonsEnum.Remove, false],
       ]),
     };
     alli.push(item);

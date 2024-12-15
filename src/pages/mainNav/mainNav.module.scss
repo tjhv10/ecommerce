@@ -5,22 +5,23 @@
   clear: left;
   z-index: 0;
   text-align: center;
-  margin: 0px;
+  margin: 0rem;
+
   ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
     list-style-type: none;
-    margin-top: 0px;
+    margin-top: 0rem;
     padding: 0rem;
     overflow: hidden;
     background-color: #5f5f5f;
     width: 99dvi;
   }
   li {
-    padding: 0px;
+    padding: 0rem;
     float: left;
-    margin: 0px;
+    margin: 0rem;
   }
   li a {
     display: block;
@@ -35,14 +36,14 @@
     background-color: #111111;
   }
   ol {
-    padding: 0px;
+    padding: 0rem;
     list-style-type: none;
     float: left;
-    margin: 0px;
+    margin: 0rem;
   }
   .quantity {
     font-size: larger;
-    margin-right: 5px;
+    margin-right: 0.4rem;
     font-weight: 600;
     width: 1.6rem;
   }

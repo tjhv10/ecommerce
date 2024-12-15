@@ -6,15 +6,15 @@
   overflow-y: scroll;
   scrollbar-width: none;
   max-height: 90dvh;
-  width: 180dvh;
+  width: 90dvi;
 }
 .filtersBar {
   display: flex;
   justify-content: start;
   flex-direction: column;
-  width: 20dvb;
-  height: 100dvb;
-  margin-right: 5%;
+  width: 20dvh;
+  height: 100dvh;
+  margin-right: 2rem;
 }
 .page {
   display: flex;
@@ -24,9 +24,9 @@
   margin-bottom: 4rem;
   width: 10.7rem;
   border: 3px solid grey;
-  padding: 5px;
+  padding: 0.4rem;
   height: 1.4rem;
-  border-radius: 5px;
+  border-radius: 0.4rem;
   outline: none;
   color: white;
   height: 2rem;
@@ -40,9 +40,8 @@
   width: 10.2rem;
   color: white;
   border: 3px solid grey;
-  // padding: 5px;
   height: 1.4rem;
-  border-radius: 5px;
+  border-radius: 0.4rem;
   outline: none;
   height: 2rem;
 }

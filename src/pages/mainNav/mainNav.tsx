@@ -3,6 +3,8 @@ import styles from "./mainNav.module.scss";
 import { useContext } from "react";
 import { CartContext } from "../../Store/shopping-cart-context";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { FcMultipleSmartphones } from "react-icons/fc";
+
 function MainNavigation() {
   const { shoppingCart } = useContext(CartContext);
 
@@ -10,7 +12,7 @@ function MainNavigation() {
     (accumulator, currentValue) => accumulator + currentValue.quantity,
     0
   );
-
+  const size = 50;
   return (
     <header>
       <div className={styles.main}>
@@ -18,18 +20,20 @@ function MainNavigation() {
           <ul>
             <li>
               <Link to="/">
-                <img
-                  src="https://i.pinimg.com/736x/16/48/41/164841e3ae4f5369f1b4299df0a17154.jpg"
-                  height="30px"
-                  width="30px"
-                ></img>
+                <FcMultipleSmartphones size={size} />
               </Link>
             </li>
             <li>
-              <div>{sum}</div>
-              <Link to="/cart">
-                <MdOutlineShoppingCart size={30} />
-              </Link>
+              <ol>
+                <li>
+                  <Link to="/cart">
+                    <MdOutlineShoppingCart size={size} />
+                  </Link>
+                </li>
+                <li className={styles.quantity}>
+                  <div>{sum}</div>
+                </li>
+              </ol>
             </li>
           </ul>
         </nav>

@@ -49,10 +49,11 @@ const Items: React.FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>
-        <div className={styles.filtersBarItem}>
+        <div className={styles.search}>
           <input
             type="text"
             placeholder="Search..."
+            className={styles.searchTerm}
             onChange={(e) => {
               if (e.target.value === "") {
                 setItems(alli);

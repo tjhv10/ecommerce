@@ -40,12 +40,12 @@ function useSetFilterChoose(
 
   useEffect(() => {
     let mySet = new Set<string>();
+
     switch (category) {
       case CategoryEnum.Price:
         if (!Array.isArray(subcategory)) {
           setSubcategory([0, 2000]);
         }
-
         setOptions(
           <Slider
             getAriaLabel={() => "Price range"}
@@ -62,7 +62,13 @@ function useSetFilterChoose(
 
       case CategoryEnum.Category:
         mySet = new Set(Object.values(subcategoryEnum));
-        setSubcategory(subcategoryEnum.Accessories);
+        if (
+          subcategory === undefined ||
+          !Object.values(subcategoryEnum).includes(
+            subcategory as subcategoryEnum
+          )
+        )
+          setSubcategory(subcategoryEnum.Accessories);
         setOptions(
           <select
             className={styles.filtersBarItem}
@@ -87,13 +93,21 @@ function useSetFilterChoose(
 
       case CategoryEnum["Uploaded date"]:
         mySet = new Set(Object.values(DateEnum));
-        setSubcategory(DateEnum["1/1/2015"]);
+        if (
+          subcategory === undefined ||
+          !Object.values(DateEnum).includes(subcategory as DateEnum)
+        )
+          setSubcategory(DateEnum["1/1/2015"]);
+
         setOptions(
           <select
             className={styles.filtersBarItem}
-            onChange={(e) =>
-              setSubcategory(DateEnum[e.target.value as keyof typeof DateEnum])
-            }
+            onChange={(e) => {
+              console.log(e.target.value);
+              console.log(subcategory);
+
+              setSubcategory(DateEnum[e.target.value as keyof typeof DateEnum]);
+            }}
           >
             {Array.from(mySet).map((option) => (
               <option value={option} key={option}>

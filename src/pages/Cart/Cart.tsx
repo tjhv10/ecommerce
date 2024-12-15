@@ -23,6 +23,7 @@ function Cart() {
   const [price, setPrice] = useState(0);
   return (
     <>
+      <h1>Welcome to cart:</h1>
       Total price: {price}$
       <div className={styles.content}>
         {shoppingCart.map(

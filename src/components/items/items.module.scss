@@ -25,5 +25,24 @@
 }
 .filtersBarItemPrice {
   margin-bottom: 3.27rem;
-  width: 50rem;
+}
+
+.search {
+  position: relative;
+  display: flex;
+  margin-bottom: 3.28rem;
+}
+
+.searchTerm {
+  width: 10.7rem;
+  border: 3px solid grey;
+  padding: 5px;
+  height: 1.4rem;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+}
+
+.searchTerm:focus {
+  color: white;
 }

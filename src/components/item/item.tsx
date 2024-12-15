@@ -69,7 +69,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
         {props.buttons.get(ButtonsEnum.PlusMinus) && (
           <div>
             <button
-              className={styles.removeB}
+              className={styles.itemB}
               onClick={() => {
                 const element = shoppingCart.find(
                   (element) => element.product.id === props.product.id

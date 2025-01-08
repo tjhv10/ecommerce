@@ -9,24 +9,30 @@ import useSetFilterChoose, {
   DateEnum,
 } from "./hooks/useSetFilterChoose.tsx";
 import useSort, { SortEnum } from "./hooks/useSort.tsx";
-import md from "../../assets/MOCK_DATA.json";
+// import md from "../../assets/MOCK_DATA.json";
 import searchFunction from "./functions/searchFunction.tsx";
 
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
+import { gql, useQuery } from "@apollo/client";
+const GET_ITEMS = gql`
+  query {
+    getItems {
+      id
+      name
+      price
+      uploadDate
+      description
+      sellerName
+      status
+      imageUrl
+      categories {
+        name
+      }
+    }
+  }
+`;
 
 const Items: React.FC = () => {
-  const alli: CartItem[] = [];
-  for (let i = 0; i < md.length; i++) {
-    const item = {
-      product: md[i],
-      quantity: 1,
-      buttons: new Map<ButtonsEnum, boolean>([
-        [ButtonsEnum.AddToCartAndGoToItemPage, true],
-      ]),
-    };
-    alli.push(item);
-  }
-
   const [category, setCategory] = useState<CategoryEnum>(
     CategoryEnum["No filter"]
   );
@@ -34,16 +40,44 @@ const Items: React.FC = () => {
     subcategoryEnum | number[] | DateEnum
   >();
   const [Items, setItems] = useState<CartItem[]>([]);
+
   const [sort, setSort] = useState<SortEnum>(SortEnum.id);
   const options = useSetFilterChoose(category, subcategory, setSubcategory);
-
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
-
-  useSetItemsCategory(addItem, subcategory, setItems, category, setSubcategory);
   useSort(sort, setItems);
+  const { loading, error, data } = useQuery(GET_ITEMS);
 
+  useSetItemsCategory(
+    data,
+    addItem,
+    subcategory,
+    setItems,
+    category,
+    setSubcategory,
+    loading
+  );
+
+  if (loading) {
+    return "Loading...";
+  }
+  if (error) return `Error! ${error.message}`;
+  const dataa = data.getItems;
+  const alli: CartItem[] = [];
+  for (let i = 0; i < 0; i++) {
+    const item: CartItem = {
+      product: dataa[i],
+      quantity: 1,
+      buttons: new Map<ButtonsEnum, boolean>([
+        [ButtonsEnum.AddToCartAndGoToItemPage, true],
+      ]),
+    };
+
+    alli.push(item);
+  }
+
+  if (Items.length == 0) return "Loading...";
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>

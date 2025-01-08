@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import md from "../../../assets/MOCK_DATA.json";
+// import md from "../../../assets/MOCK_DATA.json";
 import { ButtonsEnum, CartItem } from "../../../Store/shopping-cart-context";
 import { subcategoryEnum, DateEnum } from "./useSetFilterChoose";
+import { ItemProps } from "../../Item/item";
 export enum CategoryEnum {
   "No filter" = "No filter",
   "Category" = "Category",
@@ -9,29 +10,41 @@ export enum CategoryEnum {
   "Price" = "Price",
 }
 function useSetItemsCategory(
+  items: { [x: string]: ItemProps },
   addItem: (item: CartItem) => void,
   subcategory: subcategoryEnum | DateEnum | number[] | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
   category: string,
-  setSubcategory: Dispatch<subcategoryEnum | DateEnum | number[] | undefined>
+  setSubcategory: Dispatch<subcategoryEnum | DateEnum | number[] | undefined>,
+  loading: boolean
 ) {
   useEffect(() => {
+    if (loading) {
+      return;
+    }
     setItems([]);
-    for (const i in md) {
+    const it = items.getItems;
+    for (const i in it) {
       const item: CartItem = {
-        product: md[i],
+        // @ts-expect-error: cant make it the right type but it is
+        product: it[i],
         quantity: 1,
         buttons: new Map<ButtonsEnum, boolean>([
           [ButtonsEnum.AddToCartAndGoToItemPage, true],
         ]),
       };
+
       switch (category) {
         case CategoryEnum["No filter"]: {
           addItem(item);
           break;
         }
         case CategoryEnum["Category"]: {
-          if (item.product.category === subcategory) {
+          if (
+            item.product.categories.some(
+              (category) => category.name === subcategory
+            )
+          ) {
             addItem(item);
           }
           break;
@@ -66,7 +79,7 @@ function useSetItemsCategory(
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, subcategory]);
+  }, [loading, category, subcategory]);
 }
 
 export default useSetItemsCategory;

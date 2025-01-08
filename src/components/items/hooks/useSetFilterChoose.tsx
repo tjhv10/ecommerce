@@ -4,6 +4,7 @@ import styles from "../Items.module.scss";
 import Slider from "@mui/material/Slider";
 
 export enum subcategoryEnum {
+  // TODO fix
   "Accessories" = "Accessories",
   "Phones" = "Phones",
 }

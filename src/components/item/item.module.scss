@@ -12,11 +12,11 @@
   color: aliceblue;
   max-height: 35rem;
   .des {
+    margin-right: 0.5rem;
     height: 1.5rem;
     display: flex;
     flex-direction: row;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-y: auto;
   }
   .hl {
     font-size: xx-large;

@@ -18,7 +18,7 @@ const searchFunction = (
   const result = Items.filter(
     (Item) =>
       Item.product.name.toLowerCase().includes(phrase) ||
-      Item.product.category.toLowerCase().includes(phrase) ||
+      Item.product.categories.toLowerCase().includes(phrase) ||
       Item.product.model.toLowerCase().includes(phrase)
   );
   setItems(result);

@@ -11,18 +11,19 @@ import {
   removeItemQuantityFromShoppingCart,
 } from "./addAndRemoveItems.js";
 import { removeItemFromCart } from "../items/functions/searchFunction.js";
+export interface CategoryProp {
+  name: string;
+}
 
 export interface ItemProps {
-  id: number;
-  manufacturer: string;
-  model: string;
-  name: string;
-  uploadedDate: string;
+  categories: CategoryProp[];
   description: string;
+  id: number;
+  name: string;
   price: number;
   sellerName: string;
-  imgUrl: string;
-  category: string;
+  uploadedDate: string;
+  imageUrl: string;
 }
 
 const Item = ({ props }: { props: CartItem }): JSX.Element => {
@@ -31,10 +32,14 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
   return (
     <div className={styles.item}>
       <div className={styles.hl}>{props.product.name}</div>
-      <div className={styles.cat}>{props.product.category}</div>
+      <div className={styles.cat}>
+        {props.product.categories.map((category, index) => (
+          <span key={index}>{category.name}</span>
+        ))}
+      </div>
 
       <div>
-        <img className={styles.img} src={props.product.imgUrl} alt="pic" />
+        <img className={styles.img} src={props.product.imageUrl} alt="pic" />
       </div>
       <div className={styles.des}>Description: {props.product.description}</div>
       <div className={styles.price}>Price: {props.product.price}$</div>

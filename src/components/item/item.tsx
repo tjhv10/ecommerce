@@ -34,7 +34,11 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.hl}>{props.product.name}</div>
       <div className={styles.cat}>
         {props.product.categories.map((category, index) => (
-          <span key={index}>{category.name}</span>
+          <span key={index}>
+            {index === props.product.categories.length - 1
+              ? category.name
+              : category.name + ", "}
+          </span>
         ))}
       </div>
 

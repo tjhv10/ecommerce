@@ -1,11 +1,17 @@
-.content {
+.cart {
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
   align-items: center;
   color: #ffffff;
   overflow-y: scroll;
-  scrollbar-width: none;
-  max-height: 75dvh;
+  height: 76dvh;
   width: 100dvi;
+}
+
+.headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 6.5rem;
 }

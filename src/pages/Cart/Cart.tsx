@@ -18,9 +18,11 @@ function Cart() {
 
   return (
     <>
-      <h1>Welcome to cart:</h1>
-      Total price: {price}$
-      <div className={styles.content}>
+      <div className={styles.headline}>
+        <h1>Welcome to cart: </h1>
+        <h2>Total price: {price}$</h2>
+      </div>
+      <div className={styles.cart}>
         {shoppingCart.map(
           (item) => (
             (item.buttons = new Map<ButtonsEnum, boolean>([

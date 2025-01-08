@@ -63,21 +63,19 @@ const Items: React.FC = () => {
     return "Loading...";
   }
   if (error) return `Error! ${error.message}`;
-  const dataa = data.getItems;
+  const fetchedItems = data.getItems;
   const alli: CartItem[] = [];
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < fetchedItems.length; i++) {
     const item: CartItem = {
-      product: dataa[i],
+      product: fetchedItems[i],
       quantity: 1,
       buttons: new Map<ButtonsEnum, boolean>([
         [ButtonsEnum.AddToCartAndGoToItemPage, true],
       ]),
     };
-
     alli.push(item);
   }
 
-  if (Items.length == 0) return "Loading...";
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>

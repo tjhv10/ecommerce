@@ -15,11 +15,8 @@ const searchFunction = (
   Items: CartItem[],
   setSort: Dispatch<React.SetStateAction<SortEnum>>
 ) => {
-  const result = Items.filter(
-    (Item) =>
-      Item.product.name.toLowerCase().includes(phrase) ||
-      Item.product.categories.toLowerCase().includes(phrase) ||
-      Item.product.model.toLowerCase().includes(phrase)
+  const result = Items.filter((Item) =>
+    Item.product.name.toLowerCase().includes(phrase)
   );
   setItems(result);
   setSort(SortEnum.id);

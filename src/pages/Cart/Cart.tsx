@@ -18,7 +18,6 @@ function Cart() {
 
   if (loading) return "Submitting...";
   const handleOrderConfirmation = () => {
-    console.log(addId);
     for (const item of shoppingCart) {
       createOrder({
         variables: { itemId: item.product.id, orderId: ordersData.data.reduce((maxId: number, order: { id: number }) => (order.id > maxId ? order.id : maxId), 0) + addId, amount: item.quantity },
@@ -26,6 +25,7 @@ function Cart() {
     }
     setShoppingCart([]);
     setAddId(addId + 1);
+    alert("order sent with total price of: " + price + "$");
   };
 
   return (

@@ -2,7 +2,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
-  color: rgb(255, 255, 255);
   overflow-y: scroll;
   scrollbar-width: none;
   max-height: 90dvh;
@@ -15,6 +14,7 @@
   width: 20dvh;
   height: 100dvh;
   margin-right: 2rem;
+  margin-left: 0.2rem;
 }
 .page {
   display: flex;
@@ -24,7 +24,6 @@
   margin-bottom: 4rem;
   width: 10.7rem;
   border: 3px solid grey;
-  padding: 0.4rem;
   height: 1.4rem;
   border-radius: 0.4rem;
   outline: none;
@@ -33,6 +32,7 @@
 }
 .filtersBarItemPrice {
   margin-bottom: 3.27rem;
+  margin-left: 0.278rem;
 }
 
 .search {
@@ -47,4 +47,28 @@
 }
 .search::placeholder {
   color: white;
+}
+@media (prefers-color-scheme: light) {
+  .search {
+    margin-bottom: 4rem;
+    width: 10.2rem;
+    color: rgb(255, 255, 255);
+    background-color: black;
+    border: 3px solid grey;
+    height: 1.4rem;
+    border-radius: 0.4rem;
+    outline: none;
+    height: 2rem;
+  }
+  .filtersBarItem {
+    background-color: black;
+    margin-bottom: 4rem;
+    width: 10.7rem;
+    border: 3px solid grey;
+    height: 1.4rem;
+    border-radius: 0.4rem;
+    outline: none;
+    color: rgb(255, 255, 255);
+    height: 2rem;
+  }
 }

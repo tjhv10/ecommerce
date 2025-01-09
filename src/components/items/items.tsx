@@ -9,28 +9,11 @@ import useSetFilterChoose, {
   DateEnum,
 } from "./hooks/useSetFilterChoose.tsx";
 import useSort, { SortEnum } from "./hooks/useSort.tsx";
-// import md from "../../assets/MOCK_DATA.json";
 import searchFunction from "./functions/searchFunction.tsx";
 
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
-import { gql, useQuery } from "@apollo/client";
-const GET_ITEMS = gql`
-  query {
-    getItems {
-      id
-      name
-      price
-      uploadDate
-      description
-      sellerName
-      status
-      imageUrl
-      categories {
-        name
-      }
-    }
-  }
-`;
+import { useQuery } from "@apollo/client";
+import { GET_ITEMS } from "../../assets/queries.tsx";
 
 const Items: React.FC = () => {
   const [category, setCategory] = useState<CategoryEnum>(
@@ -65,7 +48,7 @@ const Items: React.FC = () => {
   if (error) return `Error! ${error.message}`;
   const fetchedItems = data.getItems;
 
-  const alli: CartItem[] = [];
+  let alli: CartItem[] = [];
   for (let i = 0; i < fetchedItems.length; i++) {
     const item: CartItem = {
       product: fetchedItems[i],
@@ -76,6 +59,9 @@ const Items: React.FC = () => {
     };
     alli.push(item);
   }
+  alli = alli
+    .slice()
+    .sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>

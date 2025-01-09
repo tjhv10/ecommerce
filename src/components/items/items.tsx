@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./items.module.scss";
 import Item from "../Item/item.tsx";
 import useSetItemsCategory, {
@@ -24,6 +24,8 @@ const Items: React.FC = () => {
   const [Items, setItems] = useState<CartItem[]>([]);
 
   const [sort, setSort] = useState<SortEnum>(SortEnum.id);
+  const selectSortRef = useRef<HTMLSelectElement>(null);
+  const selectFilterRef = useRef<HTMLSelectElement>(null);
   const options = useSetFilterChoose(category, subcategory, setSubcategory);
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
@@ -54,12 +56,10 @@ const Items: React.FC = () => {
     };
     alli.push(item);
   }
-  console.log(alli);
 
   alli = alli
     .slice()
     .sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
-  console.log(alli);
 
   return (
     <div className={styles.page}>
@@ -71,12 +71,23 @@ const Items: React.FC = () => {
           onChange={(e) => {
             if (e.target.value === "") {
               setItems(alli);
+              if (selectSortRef.current) {
+                selectSortRef.current.selectedIndex = 0;
+                selectSortRef.current.value = SortEnum.id;
+                setSort(SortEnum.id);
+              }
+              if (selectFilterRef.current) {
+                selectFilterRef.current.value = CategoryEnum["No filter"];
+                setCategory(CategoryEnum["No filter"]);
+                selectFilterRef.current.selectedIndex = 0;
+              }
             } else {
-              searchFunction(e.target.value, setItems, alli, setSort);
+              searchFunction(e.target.value, setItems, Items, setSort);
             }
           }}
         />
         <select
+          ref={selectFilterRef}
           className={styles.filtersBarItem}
           onChange={(e) =>
             setCategory(
@@ -92,6 +103,7 @@ const Items: React.FC = () => {
         </select>
         {category !== CategoryEnum["No filter"] ? options : null}
         <select
+          ref={selectSortRef}
           className={styles.filtersBarItem}
           onChange={(e) => {
             setSort(SortEnum[e.currentTarget.value as SortEnum]);

@@ -25,7 +25,7 @@ function Cart() {
     }
     setShoppingCart([]);
     setAddId(addId + 1);
-    alert("order sent with total price of: " + price + "$");
+    alert("Order sent with total price of: " + price + "$");
   };
 
   return (

@@ -4,9 +4,10 @@ import styles from "../Items.module.scss";
 import Slider from "@mui/material/Slider";
 
 export enum subcategoryEnum {
-  // TODO fix
-  "Accessories" = "Accessories",
-  "Phones" = "Phones",
+  "Phone" = "Phone",
+  "Tech" = "Tech",
+  "Clothing" = "Clothing",
+  "Beauty" = "Beauty",
 }
 
 export enum DateEnum {
@@ -18,6 +19,9 @@ export enum DateEnum {
   "1/1/2020" = "1/1/2020",
   "1/1/2021" = "1/1/2021",
   "1/1/2022" = "1/1/2022",
+  "1/1/2023" = "1/1/2023",
+  "1/1/2024" = "1/1/2024",
+  "1/1/2025" = "1/1/2025",
 }
 
 function useSetFilterChoose(
@@ -69,7 +73,7 @@ function useSetFilterChoose(
             subcategory as subcategoryEnum
           )
         )
-          setSubcategory(subcategoryEnum.Accessories);
+          setSubcategory(subcategoryEnum.Phone);
         setOptions(
           <select
             className={styles.filtersBarItem}

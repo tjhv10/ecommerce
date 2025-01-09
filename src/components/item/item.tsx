@@ -22,7 +22,7 @@ export interface ItemProps {
   name: string;
   price: number;
   sellerName: string;
-  uploadedDate: string;
+  uploadDate: string;
   imageUrl: string;
 }
 
@@ -51,7 +51,8 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
         Seller name: {props.product.sellerName}
       </div>
       <div className={styles.uploadedDate}>
-        Uploaded date: {props.product.uploadedDate}
+        Uploaded date:{" "}
+        {props.product.uploadDate.split("T")[0].replace(/-/g, "/")}
       </div>
       {props.buttons.get(ButtonsEnum.AddToCartAndGoToItemPage) && (
         <div>

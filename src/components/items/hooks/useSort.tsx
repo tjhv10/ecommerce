@@ -14,8 +14,7 @@ const sorts = new Map([
         .slice()
         .sort(
           (a, b) =>
-            Date.parse(a.product.uploadedDate) -
-            Date.parse(b.product.uploadedDate)
+            Date.parse(a.product.uploadDate) - Date.parse(b.product.uploadDate)
         ),
   ],
   [

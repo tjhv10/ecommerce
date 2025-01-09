@@ -10,7 +10,7 @@ export enum CategoryEnum {
   "Price" = "Price",
 }
 function useSetItemsCategory(
-  items: { [x: string]: ItemProps },
+  items: { [x: string]: ItemProps[] },
   addItem: (item: CartItem) => void,
   subcategory: subcategoryEnum | DateEnum | number[] | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
@@ -23,10 +23,10 @@ function useSetItemsCategory(
       return;
     }
     setItems([]);
-    const it = items.getItems;
+    let it = items.getItems;
+    it = it.slice().sort((a: ItemProps, b: ItemProps) => a.id - b.id);
     for (const i in it) {
       const item: CartItem = {
-        // @ts-expect-error: cant make it the right type but it is
         product: it[i],
         quantity: 1,
         buttons: new Map<ButtonsEnum, boolean>([
@@ -63,7 +63,7 @@ function useSetItemsCategory(
         case CategoryEnum["Uploaded date"]: {
           if (
             typeof subcategory === "string" &&
-            Date.parse(item.product.uploadedDate) >= Date.parse(subcategory!)
+            Date.parse(item.product.uploadDate) >= Date.parse(subcategory!)
           )
             addItem(item);
           break;

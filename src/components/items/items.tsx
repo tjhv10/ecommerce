@@ -64,6 +64,7 @@ const Items: React.FC = () => {
   }
   if (error) return `Error! ${error.message}`;
   const fetchedItems = data.getItems;
+
   const alli: CartItem[] = [];
   for (let i = 0; i < fetchedItems.length; i++) {
     const item: CartItem = {
@@ -75,7 +76,6 @@ const Items: React.FC = () => {
     };
     alli.push(item);
   }
-
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>

@@ -12,8 +12,7 @@ import useSort, { SortEnum } from "./hooks/useSort.tsx";
 import searchFunction from "./functions/searchFunction.tsx";
 
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
-import { useQuery } from "@apollo/client";
-import { GET_ITEMS } from "../../assets/queries.tsx";
+import { useGetItems } from "../../fetchDataQueries/useGetItems.tsx";
 
 const Items: React.FC = () => {
   const [category, setCategory] = useState<CategoryEnum>(
@@ -30,7 +29,7 @@ const Items: React.FC = () => {
     setItems((prevItems) => [...prevItems, Item]);
   };
   useSort(sort, setItems);
-  const { loading, error, data } = useQuery(GET_ITEMS);
+  const { data, loading } = useGetItems();
 
   useSetItemsCategory(
     data,
@@ -41,12 +40,8 @@ const Items: React.FC = () => {
     setSubcategory,
     loading
   );
-
-  if (loading) {
-    return "Loading...";
-  }
-  if (error) return `Error! ${error.message}`;
-  const fetchedItems = data.getItems;
+  if (loading) return "Loading...";
+  const fetchedItems = data;
 
   let alli: CartItem[] = [];
   for (let i = 0; i < fetchedItems.length; i++) {

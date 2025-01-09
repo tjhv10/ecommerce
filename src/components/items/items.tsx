@@ -41,12 +41,12 @@ const Items: React.FC = () => {
     loading
   );
   if (loading) return "Loading...";
-  const fetchedItems = data;
+  console.log(data);
 
   let alli: CartItem[] = [];
-  for (let i = 0; i < fetchedItems.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     const item: CartItem = {
-      product: fetchedItems[i],
+      product: data[i],
       quantity: 1,
       buttons: new Map<ButtonsEnum, boolean>([
         [ButtonsEnum.AddToCartAndGoToItemPage, true],
@@ -54,9 +54,13 @@ const Items: React.FC = () => {
     };
     alli.push(item);
   }
+  console.log(alli);
+
   alli = alli
     .slice()
     .sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
+  console.log(alli);
+
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>

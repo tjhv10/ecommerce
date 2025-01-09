@@ -23,11 +23,12 @@ function useSetItemsCategory(
       return;
     }
     setItems([]);
-    let it = items.getItems;
-    it = it.slice().sort((a: ItemProps, b: ItemProps) => a.id - b.id);
-    for (const i in it) {
+    const sortedItems = Object.values(items)
+      .flat()
+      .sort((a: ItemProps, b: ItemProps) => a.id - b.id);
+    for (const sortedItem of sortedItems) {
       const item: CartItem = {
-        product: it[i],
+        product: sortedItem,
         quantity: 1,
         buttons: new Map<ButtonsEnum, boolean>([
           [ButtonsEnum.AddToCartAndGoToItemPage, true],

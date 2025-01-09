@@ -11,7 +11,8 @@ import useGetItemById from "../../fetchDataQueries/useGetItemById";
 function ItemPage() {
   const { shoppingCart } = useContext(CartContext);
   const id = parseInt(useParams().id!);
-  const data = useGetItemById(id);
+  const { data, loading } = useGetItemById(id);
+  if (loading) return "Loading...";
 
   const item: CartItem = {
     product: data,

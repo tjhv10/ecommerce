@@ -23,5 +23,5 @@ export function useGetItems() {
     console.error(`Error! ${error.message}`);
   }
 
-  return { data, loading };
+  return { data: data ? data.getItems : null, loading };
 }

@@ -10,6 +10,7 @@ function useGetItemById(id: number) {
           description
           sellerName
           status
+          imageUrl
           categories {
             id
             name
@@ -21,6 +22,6 @@ function useGetItemById(id: number) {
   if (error) {
     console.error(`Error! ${error.message}`);
   }
-  return !loading && data ? data.getItems : [];
+  return { data: data ? data.getItemById : null, loading };
 }
 export default useGetItemById;

@@ -14,7 +14,11 @@ export interface CartItem {
 export const CartContext = React.createContext<{
   shoppingCart: CartItem[];
   setShoppingCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  addId: number;
+  setAddId: React.Dispatch<React.SetStateAction<number>>;
 }>({
   shoppingCart: [],
   setShoppingCart: () => {},
+  addId: 1,
+  setAddId: () => {},
 });

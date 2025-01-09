@@ -7,7 +7,7 @@ import {
 } from "../../Store/shopping-cart-context";
 import Item from "../../components/Item/item";
 import { useParams } from "react-router-dom";
-import useGetItemById from "../../fetchDataQueries/useGetItemById";
+import { useGetItemById } from "../../fetchDataQueries/useGetItemById";
 function ItemPage() {
   const { shoppingCart } = useContext(CartContext);
   const id = parseInt(useParams().id!);

@@ -10,7 +10,6 @@ import useSetFilterChoose, {
 } from "./hooks/useSetFilterChoose.tsx";
 import useSort, { SortEnum } from "./hooks/useSort.tsx";
 import searchFunction from "./functions/searchFunction.tsx";
-
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
 import { useGetItems } from "../../fetchDataQueries/useGetItems.tsx";
 
@@ -30,9 +29,9 @@ const Items: React.FC = () => {
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
+
   useSort(sort, setItems);
   const { data, loading } = useGetItems();
-
   useSetItemsCategory(
     data,
     addItem,
@@ -43,8 +42,6 @@ const Items: React.FC = () => {
     loading
   );
   if (loading) return "Loading...";
-  console.log(data);
-
   let alli: CartItem[] = [];
   for (let i = 0; i < data.length; i++) {
     const item: CartItem = {

@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-function useGetItemById(id: number) {
+export function useGetItemById(id: number) {
   const GET_ITEM_BY_ID = gql`
       query {
         getItemById(id: ${id}) {
@@ -24,4 +24,3 @@ function useGetItemById(id: number) {
   }
   return { data: data ? data.getItemById : null, loading };
 }
-export default useGetItemById;

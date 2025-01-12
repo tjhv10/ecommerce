@@ -3,7 +3,6 @@ import styles from "./item.module.scss";
 import { useContext } from "react";
 import { ButtonsEnum, CartContext, CartItem } from "../../Store/shopping-cart-context.js";
 import { addItemToShoppingCart, removeItemQuantityFromShoppingCart } from "./addAndRemoveItems.js";
-import { removeItemFromCart } from "../items/functions/searchFunction.js";
 export interface CategoryProp {
   name: string;
 }
@@ -69,7 +68,9 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
                   setShoppingCart(removeItemQuantityFromShoppingCart(shoppingCart, props));
 
                   if (element.quantity === 1) {
-                    removeItemFromCart(props.product.id, shoppingCart, setShoppingCart);
+                    setShoppingCart(
+                      shoppingCart.filter((item) => item.product.id !== props.product.id)
+                    );
                     return;
                   }
                 }
@@ -91,7 +92,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
         <button
           className={styles.itemB}
           onClick={() => {
-            removeItemFromCart(props.product.id, shoppingCart, setShoppingCart);
+            setShoppingCart(shoppingCart.filter((item) => item.product.id !== props.product.id));
           }}>
           Remove Item from Cart
         </button>

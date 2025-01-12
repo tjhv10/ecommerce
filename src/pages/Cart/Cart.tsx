@@ -20,7 +20,15 @@ function Cart() {
   const handleOrderConfirmation = () => {
     for (const item of shoppingCart) {
       createOrder({
-        variables: { itemId: item.product.id, orderId: ordersData.data.reduce((maxId: number, order: { id: number }) => (order.id > maxId ? order.id : maxId), 0) + addId, amount: item.quantity },
+        variables: {
+          itemId: item.product.id,
+          orderId:
+            ordersData.data.reduce(
+              (maxId: number, order: { id: number }) => (order.id > maxId ? order.id : maxId),
+              0
+            ) + addId,
+          amount: item.quantity,
+        },
       });
     }
     setShoppingCart([]);
@@ -35,7 +43,7 @@ function Cart() {
         <button className={styles.buyButton} onClick={handleOrderConfirmation}>
           Confirm order
         </button>
-        <h2>Total price: {price}$</h2>
+        <h2 className={styles.totalPrice}>Total price: {price}$</h2>
       </div>
       <div className={styles.cart}>
         {shoppingCart.map((item) => {

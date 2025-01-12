@@ -4,7 +4,7 @@ import { ButtonsEnum, CartItem } from "../../../Store/shopping-cart-context";
 import { DateEnum, SortEnum, SubCategoryEnum } from "../enums";
 import { ItemProps } from "../../Item/item";
 
-function useFilters(
+function useItemFiltering(
   data: ItemProps[],
   subcategory: SubCategoryEnum | DateEnum | number[] | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
@@ -57,4 +57,4 @@ function useFilters(
   }, [loading, subcategory, price, date, sort, phrase]);
 }
 
-export default useFilters;
+export default useItemFiltering;

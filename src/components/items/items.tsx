@@ -4,7 +4,7 @@ import Item from "../Item/item.tsx";
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
 import { useGetItems } from "../../fetchDataQueries/useGetItems.tsx";
 import { DateEnum, SortEnum, SubCategoryEnum } from "./enums.tsx";
-import useFilters from "./hooks/useFilters.tsx";
+import useItemFiltering from "./hooks/useFilters.tsx";
 import { Slider } from "@mui/material";
 
 const Items: React.FC = () => {
@@ -14,7 +14,11 @@ const Items: React.FC = () => {
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<SortEnum>(SortEnum.Id);
   const [searchPhrase, setSearchPhrase] = useState<string>("");
-
+  const sortMap: { [key: string]: SortEnum } = {
+    id: SortEnum.Id,
+    price: SortEnum.Price,
+    date: SortEnum.Date,
+  };
   function valuetext(value: number) {
     return `${value}$`;
   }
@@ -27,7 +31,7 @@ const Items: React.FC = () => {
 
   const { data, loading } = useGetItems();
 
-  useFilters(data, subcategory, setItems, loading, date, price, sort, searchPhrase);
+  useItemFiltering(data, subcategory, setItems, loading, date, price, sort, searchPhrase);
 
   if (loading) return "Loading...";
   let alli: CartItem[] = [];
@@ -44,6 +48,7 @@ const Items: React.FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>
+        Search:
         <input
           type="text"
           placeholder="Search..."
@@ -52,6 +57,7 @@ const Items: React.FC = () => {
             setSearchPhrase(e.currentTarget.value);
           }}
         />
+        Category:
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {
@@ -63,6 +69,7 @@ const Items: React.FC = () => {
             </option>
           ))}
         </select>
+        Uploaded date from:
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {
@@ -74,6 +81,7 @@ const Items: React.FC = () => {
             </option>
           ))}
         </select>
+        Price:
         <Slider
           getAriaLabel={() => "Price range"}
           value={price}
@@ -88,7 +96,7 @@ const Items: React.FC = () => {
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {
-            setSort(SortEnum[e.currentTarget.value as SortEnum]);
+            setSort(sortMap[e.currentTarget.value as SortEnum]);
           }}>
           <option value="id">Sort...</option>
           <option value="price">Sort by price</option>

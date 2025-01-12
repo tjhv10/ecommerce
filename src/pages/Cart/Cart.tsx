@@ -2,15 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import { ButtonsEnum, CartContext } from "../../Store/shopping-cart-context";
 import Item from "../../components/Item/item";
 import styles from "./Cart.module.scss";
-import { useGetOrdersIds } from "../../fetchDataQueries/useGetOrdersIds";
 import { useCreateOrder } from "../../fetchDataQueries/useCreateOrder";
 
 function Cart() {
-  const { shoppingCart, setShoppingCart, addId, setAddId } = useContext(CartContext);
+  const { shoppingCart, setShoppingCart } = useContext(CartContext);
   const [price, setPrice] = useState(0);
-  const ordersData = useGetOrdersIds();
   const { createOrder, loading } = useCreateOrder();
-
+  type createItemsOrderInput = {
+    itemId: number;
+    amount: number;
+  };
   useEffect(() => {
     const sum = shoppingCart.reduce((total, item) => total + item.quantity * item.product.price, 0);
     setPrice(sum);
@@ -18,21 +19,18 @@ function Cart() {
 
   if (loading) return "Submitting...";
   const handleOrderConfirmation = () => {
-    for (const item of shoppingCart) {
-      createOrder({
-        variables: {
-          itemId: item.product.id,
-          orderId:
-            ordersData.data.reduce(
-              (maxId: number, order: { id: number }) => (order.id > maxId ? order.id : maxId),
-              0
-            ) + addId,
-          amount: item.quantity,
-        },
-      });
-    }
+    const itemsInput: createItemsOrderInput[] = shoppingCart.map((item) => ({
+      itemId: item.product.id,
+      amount: item.quantity,
+    }));
+    console.log(itemsInput);
+
+    createOrder({
+      variables: {
+        createItemsOrderInput: itemsInput,
+      },
+    });
     setShoppingCart([]);
-    setAddId(addId + 1);
     alert("Order sent with total price of: " + price + "$");
   };
 

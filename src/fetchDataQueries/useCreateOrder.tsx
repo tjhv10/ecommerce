@@ -2,11 +2,9 @@ import { gql, useMutation } from "@apollo/client";
 
 export function useCreateOrder() {
   const CREATE_ORDER = gql`
-    mutation CreateOrder($itemId: Int!, $orderId: Int!, $amount: Int!) {
-      createItemOrder(createItemsOrderInput: { itemId: $itemId, orderId: $orderId, amount: $amount }) {
+    mutation CreateOrder($createItemsOrderInput: [CreateItemsOrderInput!]!) {
+      createItemsOrder(createItemsOrderInput: $createItemsOrderInput) {
         id
-        itemId
-        orderId
       }
     }
   `;

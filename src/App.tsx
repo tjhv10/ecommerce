@@ -32,10 +32,8 @@ const router = createBrowserRouter([
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState<CartItem[]>([]);
-  const [addId, setAddId] = useState<number>(1);
-
   return (
-    <CartContext.Provider value={{ shoppingCart, setShoppingCart, addId, setAddId }}>
+    <CartContext.Provider value={{ shoppingCart, setShoppingCart }}>
       <RouterProvider router={router} />
     </CartContext.Provider>
   );

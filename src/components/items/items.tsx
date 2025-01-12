@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import styles from "./items.module.scss";
 import Item from "../Item/item.tsx";
-import searchFunction from "./functions/searchFunction.tsx";
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
 import { useGetItems } from "../../fetchDataQueries/useGetItems.tsx";
 import { DateEnum, SortEnum, SubCategoryEnum } from "./enums.tsx";
-import useSetItemsCategory from "./hooks/useSetItemsCategory.tsx";
+import useFilters from "./hooks/useFilters.tsx";
 import { Slider } from "@mui/material";
 
 const Items: React.FC = () => {
@@ -13,18 +12,23 @@ const Items: React.FC = () => {
   const [subcategory, setSubcategory] = useState<SubCategoryEnum>(SubCategoryEnum.All);
   const [date, setDate] = useState<DateEnum>(DateEnum["All dates"]);
   const [Items, setItems] = useState<CartItem[]>([]);
-  const [sort, setSort] = useState<SortEnum>(SortEnum.id);
+  const [sort, setSort] = useState<SortEnum>(SortEnum.Id);
+  const [searchPhrase, setSearchPhrase] = useState<string>("");
 
   function valuetext(value: number) {
     return `${value}$`;
   }
+
   const handleChange = (_event: Event, newValue: number | number[]) => {
     if (Array.isArray(newValue)) {
       setPrice(newValue);
     }
   };
+
   const { data, loading } = useGetItems();
-  useSetItemsCategory(data, subcategory, setItems, loading, date, price, sort);
+
+  useFilters(data, subcategory, setItems, loading, date, price, sort, searchPhrase);
+
   if (loading) return "Loading...";
   let alli: CartItem[] = [];
   for (let i = 0; i < data.length; i++) {
@@ -36,6 +40,7 @@ const Items: React.FC = () => {
     alli.push(item);
   }
   alli = alli.slice().sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
+
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>
@@ -44,11 +49,7 @@ const Items: React.FC = () => {
           placeholder="Search..."
           className={styles.search}
           onChange={(e) => {
-            if (e.target.value === "") {
-              setItems(alli);
-            } else {
-              searchFunction(e.target.value, setItems, Items);
-            }
+            setSearchPhrase(e.currentTarget.value);
           }}
         />
         <select
@@ -83,6 +84,7 @@ const Items: React.FC = () => {
           min={0}
           max={2000}
         />
+        Sort:
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {

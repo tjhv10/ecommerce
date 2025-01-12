@@ -29,7 +29,7 @@ export enum DateEnum {
 }
 
 export enum SortEnum {
-  "id" = "id",
-  "date" = "date",
-  "price" = "price",
+  "Id" = "Id",
+  "Date" = "Date",
+  "Price" = "Price",
 }

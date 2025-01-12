@@ -4,26 +4,27 @@ import { ButtonsEnum, CartItem } from "../../../Store/shopping-cart-context";
 import { DateEnum, SortEnum, SubCategoryEnum } from "../enums";
 import { ItemProps } from "../../Item/item";
 
-function useSetItemsCategory(
+function useFilters(
   data: ItemProps[],
   subcategory: SubCategoryEnum | DateEnum | number[] | undefined,
   setItems: Dispatch<SetStateAction<CartItem[]>>,
   loading: boolean,
   date: string,
   price: number[],
-  sort: SortEnum
+  sort: SortEnum,
+  phrase: string
 ) {
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
   const sorts = new Map([
     [
-      SortEnum.date,
+      SortEnum.Date,
       (items: ItemProps[]) =>
         items.slice().sort((a, b) => Date.parse(a.uploadDate) - Date.parse(b.uploadDate)),
     ],
-    [SortEnum.id, (items: ItemProps[]) => items.slice().sort((a, b) => a.id - b.id)],
-    [SortEnum.price, (items: ItemProps[]) => items.slice().sort((a, b) => a.price - b.price)],
+    [SortEnum.Id, (items: ItemProps[]) => items.slice().sort((a, b) => a.id - b.id)],
+    [SortEnum.Price, (items: ItemProps[]) => items.slice().sort((a, b) => a.price - b.price)],
   ]);
   const getSortedItems = (sortEnum: SortEnum, items: ItemProps[]) => {
     const sortFunction = sorts.get(sortEnum);
@@ -42,7 +43,8 @@ function useSetItemsCategory(
           sortedItem.categories.some((category) => category.name === subcategory)) &&
         sortedItem.price >= lowPrice &&
         sortedItem.price <= highPrice &&
-        (date === "All dates" || Date.parse(sortedItem.uploadDate) >= Date.parse(date!))
+        (date === "All dates" || Date.parse(sortedItem.uploadDate) >= Date.parse(date!)) &&
+        sortedItem.name.toLowerCase().includes(phrase)
       ) {
         const item: CartItem = {
           product: sortedItem,
@@ -52,7 +54,7 @@ function useSetItemsCategory(
         addItem(item);
       }
     }
-  }, [loading, subcategory, price, date, sort]);
+  }, [loading, subcategory, price, date, sort, phrase]);
 }
 
-export default useSetItemsCategory;
+export default useFilters;

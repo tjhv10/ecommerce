@@ -1,15 +1,8 @@
 import { Link } from "react-router-dom";
 import styles from "./item.module.scss";
 import { useContext } from "react";
-import {
-  ButtonsEnum,
-  CartContext,
-  CartItem,
-} from "../../Store/shopping-cart-context.js";
-import {
-  addItemToShoppingCart,
-  removeItemQuantityFromShoppingCart,
-} from "./addAndRemoveItems.js";
+import { ButtonsEnum, CartContext, CartItem } from "../../Store/shopping-cart-context.js";
+import { addItemToShoppingCart, removeItemQuantityFromShoppingCart } from "./addAndRemoveItems.js";
 import { removeItemFromCart } from "../items/functions/searchFunction.js";
 export interface CategoryProp {
   name: string;
@@ -35,9 +28,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.cat}>
         {props.product.categories.map((category, index) => (
           <span key={index}>
-            {index === props.product.categories.length - 1
-              ? category.name
-              : category.name + ", "}
+            {index === props.product.categories.length - 1 ? category.name : category.name + ", "}
           </span>
         ))}
       </div>
@@ -47,12 +38,9 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       </div>
       <div className={styles.des}>Description: {props.product.description}</div>
       <div className={styles.price}>Price: {props.product.price}$</div>
-      <div className={styles.sellerName}>
-        Seller name: {props.product.sellerName}
-      </div>
+      <div className={styles.sellerName}>Seller name: {props.product.sellerName}</div>
       <div className={styles.uploadedDate}>
-        Uploaded date:{" "}
-        {props.product.uploadDate.split("T")[0].replace(/-/g, "/")}
+        Uploaded date: {props.product.uploadDate.split("T")[0].replace(/-/g, "/")}
       </div>
       {props.buttons.get(ButtonsEnum.AddToCartAndGoToItemPage) && (
         <div>
@@ -60,8 +48,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
             className={styles.itemB}
             onClick={() => {
               setShoppingCart(addItemToShoppingCart(shoppingCart, props));
-            }}
-          >
+            }}>
             Add to cart
           </button>
           <Link to={{ pathname: "/prodact/" + props.product.id }}>
@@ -79,29 +66,21 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
                   (element) => element.product.id === props.product.id
                 );
                 if (element) {
-                  setShoppingCart(
-                    removeItemQuantityFromShoppingCart(shoppingCart, props)
-                  );
+                  setShoppingCart(removeItemQuantityFromShoppingCart(shoppingCart, props));
 
                   if (element.quantity === 1) {
-                    removeItemFromCart(
-                      props.product.id,
-                      shoppingCart,
-                      setShoppingCart
-                    );
+                    removeItemFromCart(props.product.id, shoppingCart, setShoppingCart);
                     return;
                   }
                 }
-              }}
-            >
+              }}>
               -
             </button>
             <button
               className={styles.itemB}
               onClick={() => {
                 setShoppingCart(addItemToShoppingCart(shoppingCart, props));
-              }}
-            >
+              }}>
               +
             </button>
             quantity: {props.quantity}
@@ -113,8 +92,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
           className={styles.itemB}
           onClick={() => {
             removeItemFromCart(props.product.id, shoppingCart, setShoppingCart);
-          }}
-        >
+          }}>
           Remove Item from Cart
         </button>
       )}

@@ -12,6 +12,7 @@ function Cart() {
     itemId: number;
     amount: number;
   };
+
   useEffect(() => {
     const sum = shoppingCart.reduce((total, item) => total + item.quantity * item.product.price, 0);
     setPrice(sum);

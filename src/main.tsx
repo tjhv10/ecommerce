@@ -5,7 +5,7 @@ import { StrictMode } from "react";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "http://localhost:3002/graphql",
+  uri: import.meta.env.VITE_BACKEND_LINK,
   cache: new InMemoryCache(),
 });
 createRoot(document.getElementById("root")!).render(

@@ -17,7 +17,7 @@ export interface ItemProps {
   uploadDate: string;
   imageUrl: string;
 }
-
+const prettifyDate = (date: string) => date.split("T")[0].split("-").reverse().join("/");
 const Item = ({ props }: { props: CartItem }): JSX.Element => {
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
 
@@ -39,7 +39,7 @@ const Item = ({ props }: { props: CartItem }): JSX.Element => {
       <div className={styles.price}>Price: {props.product.price}$</div>
       <div className={styles.sellerName}>Seller name: {props.product.sellerName}</div>
       <div className={styles.uploadedDate}>
-        Uploaded date: {props.product.uploadDate.split("T")[0].replace(/-/g, "/")}
+        Uploaded date: {prettifyDate(props.product.uploadDate)}
       </div>
       {props.buttons.get(ButtonsEnum.AddToCartAndGoToItemPage) && (
         <div>

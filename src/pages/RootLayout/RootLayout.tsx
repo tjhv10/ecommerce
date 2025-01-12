@@ -8,9 +8,9 @@ function RootLayout() {
       <div className={styles.navBar}>
         <MainNavigation />
       </div>
-      <div className={styles.main}>
+      <>
         <Outlet />
-      </div>
+      </>
     </>
   );
 }

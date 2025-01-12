@@ -1,6 +1,5 @@
 import { Dispatch } from "react";
 import { CartItem } from "../../../Store/shopping-cart-context";
-import { SortEnum } from "../hooks/useSort";
 export const removeItemFromCart = (
   ItemId: number,
   shoppingCart: CartItem[],
@@ -12,13 +11,9 @@ export const removeItemFromCart = (
 const searchFunction = (
   phrase: string,
   setItems: Dispatch<React.SetStateAction<CartItem[]>>,
-  Items: CartItem[],
-  setSort: Dispatch<React.SetStateAction<SortEnum>>
+  Items: CartItem[]
 ) => {
-  const result = Items.filter((Item) =>
-    Item.product.name.toLowerCase().includes(phrase)
-  );
+  const result = Items.filter((Item) => Item.product.name.toLowerCase().includes(phrase));
   setItems(result);
-  setSort(SortEnum.id);
 };
 export default searchFunction;

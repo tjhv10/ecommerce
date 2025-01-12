@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "./items.module.scss";
 import Item from "../Item/item.tsx";
-import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
+import { CartItem } from "../../Store/shopping-cart-context.tsx";
 import { useGetItems } from "../../fetchDataQueries/useGetItems.tsx";
 import { DateEnum, SortEnum, SubCategoryEnum } from "./enums.tsx";
-import useItemFiltering from "./hooks/useFilters.tsx";
+import useItemFiltering from "./hooks/useItemFiltering.tsx";
 import { Slider } from "@mui/material";
 
 const Items: React.FC = () => {
@@ -14,11 +14,13 @@ const Items: React.FC = () => {
   const [Items, setItems] = useState<CartItem[]>([]);
   const [sort, setSort] = useState<SortEnum>(SortEnum.Id);
   const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const { data, loading } = useGetItems();
   const sortMap: { [key: string]: SortEnum } = {
     id: SortEnum.Id,
     price: SortEnum.Price,
     date: SortEnum.Date,
   };
+
   function valuetext(value: number) {
     return `${value}$`;
   }
@@ -29,22 +31,9 @@ const Items: React.FC = () => {
     }
   };
 
-  const { data, loading } = useGetItems();
-
   useItemFiltering(data, subcategory, setItems, loading, date, price, sort, searchPhrase);
 
   if (loading) return "Loading...";
-  let alli: CartItem[] = [];
-  for (let i = 0; i < data.length; i++) {
-    const item: CartItem = {
-      product: data[i],
-      quantity: 1,
-      buttons: new Map<ButtonsEnum, boolean>([[ButtonsEnum.AddToCartAndGoToItemPage, true]]),
-    };
-    alli.push(item);
-  }
-  alli = alli.slice().sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
-
   return (
     <div className={styles.page}>
       <div className={styles.filtersBar}>

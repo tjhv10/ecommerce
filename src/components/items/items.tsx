@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./items.module.scss";
-import Item from "../Item/item.tsx";
+import Item, { ItemProps } from "../Item/item.tsx";
 import useSort, { SortEnum } from "./hooks/useSort.tsx";
 import searchFunction from "./functions/searchFunction.tsx";
 import { ButtonsEnum, CartItem } from "../../Store/shopping-cart-context.tsx";
@@ -11,39 +11,52 @@ import { CategoryEnum, DateEnum } from "./enums.tsx";
 const Items: React.FC = () => {
   const [priceRange, setPriceRange] = useState<number[]>([0, 2000]);
   const [Items, setItems] = useState<CartItem[]>([]);
-
   const [sort, setSort] = useState<SortEnum>(SortEnum.id);
   const selectSortRef = useRef<HTMLSelectElement>(null);
-  const selectFilterRef = useRef<HTMLSelectElement>(null);
+  const { data, loading } = useGetItems();
+
+  useEffect(() => {
+    if (data) {
+      let allItems: CartItem[] = [];
+      for (let i = 0; i < data.length; i++) {
+        const item: CartItem = {
+          product: data[i],
+          quantity: 1,
+          buttons: new Map<ButtonsEnum, boolean>([[ButtonsEnum.AddToCartAndGoToItemPage, true]]),
+        };
+        allItems.push(item);
+      }
+      allItems = allItems.slice().sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
+      setItems(allItems);
+    }
+  }, [data]);
+
   const addItem = (Item: CartItem) => {
     setItems((prevItems) => [...prevItems, Item]);
   };
+
   const handleChange = (_event: Event, newValue: number | number[]) => {
     if (Array.isArray(newValue) && newValue.length === 2) {
       const [lowPrice, highPrice] = newValue;
       setPriceRange(newValue);
+      setItems([]);
       for (const item of Items) {
-        if (item.product.price >= lowPrice && item.product.price <= highPrice) addItem(item);
+        if (item.product.price >= lowPrice && item.product.price <= highPrice) {
+          addItem(item);
+        } else {
+          console.log(`Item with price ${item.product.price} is out of range.`);
+        }
       }
     }
   };
+
   function valuetext(value: number) {
     return `${value}$`;
   }
-  useSort(sort, setItems);
-  const { data, loading } = useGetItems();
-  if (loading) return "Loading...";
-  let alli: CartItem[] = [];
-  for (let i = 0; i < data.length; i++) {
-    const item: CartItem = {
-      product: data[i],
-      quantity: 1,
-      buttons: new Map<ButtonsEnum, boolean>([[ButtonsEnum.AddToCartAndGoToItemPage, true]]),
-    };
-    alli.push(item);
-  }
 
-  alli = alli.slice().sort((a: CartItem, b: CartItem) => a.product.id - b.product.id);
+  useSort(sort, setItems);
+
+  if (loading) return "Loading...";
 
   return (
     <div className={styles.page}>
@@ -54,14 +67,11 @@ const Items: React.FC = () => {
           className={styles.search}
           onChange={(e) => {
             if (e.target.value === "") {
-              setItems(alli);
+              setItems(data);
               if (selectSortRef.current) {
                 selectSortRef.current.selectedIndex = 0;
                 selectSortRef.current.value = SortEnum.id;
                 setSort(SortEnum.id);
-              }
-              if (selectFilterRef.current) {
-                selectFilterRef.current.selectedIndex = 0;
               }
             } else {
               searchFunction(e.target.value, setItems, Items, setSort);
@@ -72,13 +82,23 @@ const Items: React.FC = () => {
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {
-            for (const item of Items) {
+            setItems([]);
+            for (const item of data) {
               if (
                 e.currentTarget.value === "All" ||
-                item.product.categories.some((category) => category.name === e.currentTarget.value)
+                item.product.categories.some(
+                  (category: ItemProps) => category.name === e.currentTarget.value
+                )
               ) {
                 addItem(item);
               }
+              // } else {
+              //   console.log(
+              //     `Item with category ${item.product.categories
+              //       .map((c) => c.name)
+              //       .join(", ")} does not match the filter.`
+              //   );
+              // }
             }
           }}>
           {Array.from(new Set(Object.values(CategoryEnum))).map((option) => (
@@ -91,12 +111,18 @@ const Items: React.FC = () => {
         <select
           className={styles.filtersBarItem}
           onChange={(e) => {
-            for (const item of Items) {
+            setItems([]);
+            for (const item of data) {
               if (
                 e.currentTarget.value === "All Dates" ||
                 Date.parse(item.product.uploadDate) >= Date.parse(e.currentTarget.value)
-              )
+              ) {
                 addItem(item);
+              } else {
+                console.log(
+                  `Item with upload date ${item.product.uploadDate} does not match the filter.`
+                );
+              }
             }
           }}>
           {Array.from(new Set(Object.values(DateEnum))).map((option) => (

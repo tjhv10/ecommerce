@@ -23,8 +23,6 @@ function Cart() {
       itemId: item.product.id,
       amount: item.quantity,
     }));
-    console.log(itemsInput);
-
     createOrder({
       variables: {
         createItemsOrderInput: itemsInput,
